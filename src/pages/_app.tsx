@@ -9,7 +9,7 @@ import {
 
 import MuiStylesProvider from '@mui/styles/StylesProvider';
 
-import {GlobalStyle} from "../themes/globalStyles";
+import {GlobalStyle} from 'themes/globalStyles';
 
 const queryClient = new QueryClient();
 
