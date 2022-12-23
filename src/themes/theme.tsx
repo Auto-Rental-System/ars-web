@@ -1,7 +1,7 @@
 import { createTheme, responsiveFontSizes, ThemeOptions } from '@mui/material/styles';
 import merge from 'lodash/merge';
 
-git import { shadows } from './shadows';
+import { shadows } from './shadows';
 
 export const colors = {
 	strokes: '#B3B3B3',
