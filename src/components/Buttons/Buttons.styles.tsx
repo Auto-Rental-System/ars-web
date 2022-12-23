@@ -31,9 +31,7 @@ const GenericContainedButton = styled(ContainedButton)`
 
 const GenericOutlinedButton = styled(GenericContainedButton).attrs({ as: OutlinedButton })``;
 
-export const Primary: React.FC<ButtonProps> = props => (
-	<GenericContainedButton color={'primary'} {...props} />
-);
+export const Primary: React.FC<ButtonProps> = props => <GenericContainedButton color={'primary'} {...props} />;
 
 export const Secondary = styled(GenericOutlinedButton)`
 	&,
