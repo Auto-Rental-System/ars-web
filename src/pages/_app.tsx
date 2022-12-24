@@ -6,6 +6,7 @@ import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/ma
 import MuiStylesProvider from '@mui/styles/StylesProvider';
 
 import theme, { GlobalStyle } from 'themes';
+import { SnackbarProvider } from 'hooks/notistack/snackbar.provider';
 
 const queryClient = new QueryClient();
 
@@ -16,8 +17,10 @@ export default function App({ Component, pageProps }: AppProps) {
 				<StyledThemeProvider theme={theme}>
 					<StyledEngineProvider injectFirst>
 						<MuiThemeProvider theme={theme}>
-							<GlobalStyle />
-							<Component {...pageProps} />
+							<SnackbarProvider>
+								<GlobalStyle />
+								<Component {...pageProps} />
+							</SnackbarProvider>
 						</MuiThemeProvider>
 					</StyledEngineProvider>
 				</StyledThemeProvider>
