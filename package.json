@@ -11,6 +11,7 @@
     "generate-clients": "ts-node --project ./scripts/tsconfig.json ./scripts/generateServiceClient.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.238.0",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.1",
     "@mui/styles": "^5.11.1",
