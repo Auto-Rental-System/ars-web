@@ -35,7 +35,7 @@ export function useSnackbarOnError(ignoredErrorCode?: number) {
 				console.error(error);
 			}
 			if (!ignoredErrorCode || !error?.status || ignoredErrorCode !== error?.status) {
-				snackbar.enqueueSnackbar(error, { variant: 'error' });
+				snackbar.enqueueSnackbar(extractErrorMessage(error), { variant: 'error' });
 			}
 		},
 		[snackbar, ignoredErrorCode, extractErrorMessage],
