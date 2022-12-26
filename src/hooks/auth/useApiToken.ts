@@ -1,6 +1,6 @@
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { OpenAPI as CoreOpenAPi } from 'clients/CoreService';
 
+import { OpenAPI as CoreOpenAPi } from 'clients/CoreService';
 import { entities } from 'consts/entities';
 import { SharedStateReturn, useSharedState } from 'hooks/state/useSharedState';
 
