@@ -15,11 +15,13 @@ export const LayoutContainer = styled.div`
 	border-radius: 1rem;
 	border: 1px solid ${({ theme }) => theme.palette.primary.main};
 	padding: 1.5rem;
+
+	width: 35rem;
+	max-width: 80%;
 `;
 
 export const AuthForm = styled.div`
 	margin-top: 3rem;
-	width: 30rem;
 
 	display: flex;
 	flex-direction: column;

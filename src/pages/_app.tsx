@@ -12,10 +12,10 @@ import { useAutoTokenRefresh } from 'hooks/auth/useAuthTokenRefresh';
 
 const queryClient = new QueryClient();
 
-CoreOpenAPi.BASE = process.env.CORE_URL as string;
+CoreOpenAPi.BASE = process.env.NEXT_PUBLIC_CORE_URL as string;
 
 export default function App({ Component, pageProps }: AppProps) {
-	// useAutoTokenRefresh();
+	useAutoTokenRefresh();
 
 	return (
 		<QueryClientProvider client={queryClient} contextSharing>

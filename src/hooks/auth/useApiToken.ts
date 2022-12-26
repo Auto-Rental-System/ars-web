@@ -28,7 +28,7 @@ export function useApiToken(): SharedStateReturn<null | ApiToken> {
 const ACCOUNT_RESPONSE_KEY = 'AUTH_INFO';
 
 const getAccessToken = (): null | ApiToken => {
-	const restored = localStorage.getItem(ACCOUNT_RESPONSE_KEY);
+	const restored = typeof window !== 'undefined' ? localStorage.getItem(ACCOUNT_RESPONSE_KEY) : null;
 	return restored ? JSON.parse(restored) : null;
 };
 

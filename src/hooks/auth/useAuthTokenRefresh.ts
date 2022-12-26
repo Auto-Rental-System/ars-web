@@ -6,9 +6,9 @@ import { useLogout } from './useLogout';
 import { hashCognitoSecret } from 'shared/util';
 
 export function useAutoTokenRefresh() {
-	const region: string = process.env.COGNITO_REGION || '';
-	const clientId: string = process.env.COGNITO_CLIENT_ID || '';
-	const clientSecret: string = process.env.COGNITO_CLIENT_SECRET || '';
+	const region: string = process.env.NEXT_PUBLIC_COGNITO_REGION || '';
+	const clientId: string = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || '';
+	const clientSecret: string = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET || '';
 
 	const provider = useMemo(() => new CognitoIdentityProvider({ region }), [region]);
 

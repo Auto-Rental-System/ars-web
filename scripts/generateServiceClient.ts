@@ -10,7 +10,7 @@ dotenv.config();
 const dependedMicroservices = [
 	{
 		serviceName: 'CoreService',
-		swaggerUrl: process.env.CORE_URL + '/api-json',
+		swaggerUrl: process.env.NEXT_PUBLIC_CORE_URL + '/api-json',
 	},
 ];
 
