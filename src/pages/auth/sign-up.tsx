@@ -1,6 +1,8 @@
 import Head from 'next/head';
+import Box from '@mui/material/Box';
 
 import { SignUp } from 'components/Auth';
+import { AppHeader } from 'components/AppHeader';
 
 export default function SignUpPage() {
 	return (
@@ -12,7 +14,10 @@ export default function SignUpPage() {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<main>
-				<SignUp />
+				<Box height={'100%'} display={'flex'} flexDirection={'column'}>
+					<AppHeader />
+					<SignUp />
+				</Box>
 			</main>
 		</>
 	);
