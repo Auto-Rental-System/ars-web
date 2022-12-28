@@ -7,14 +7,20 @@ import MuiStylesProvider from '@mui/styles/StylesProvider';
 
 import theme, { GlobalStyle } from 'themes';
 import { SnackbarProvider } from 'hooks/notistack/snackbar.provider';
+import { OpenAPI as CoreOpenAPi } from 'clients/CoreService';
+import { useAutoTokenRefresh } from 'hooks/auth';
 
 const queryClient = new QueryClient();
 
+CoreOpenAPi.BASE = process.env.NEXT_PUBLIC_CORE_URL as string;
+
 export default function App({ Component, pageProps }: AppProps) {
+	useAutoTokenRefresh();
+
 	return (
 		<QueryClientProvider client={queryClient} contextSharing>
-			<MuiStylesProvider injectFirst>
-				<StyledThemeProvider theme={theme}>
+			<StyledThemeProvider theme={theme}>
+				<MuiStylesProvider injectFirst>
 					<StyledEngineProvider injectFirst>
 						<MuiThemeProvider theme={theme}>
 							<SnackbarProvider>
@@ -23,8 +29,8 @@ export default function App({ Component, pageProps }: AppProps) {
 							</SnackbarProvider>
 						</MuiThemeProvider>
 					</StyledEngineProvider>
-				</StyledThemeProvider>
-			</MuiStylesProvider>
+				</MuiStylesProvider>
+			</StyledThemeProvider>
 		</QueryClientProvider>
 	);
 }

@@ -38,7 +38,7 @@ export function useSnackbarOnError(ignoredErrorCode?: number) {
 				snackbar.enqueueSnackbar(extractErrorMessage(error), { variant: 'error' });
 			}
 		},
-		[snackbar, ignoredErrorCode, extractErrorMessage],
+		[snackbar, ignoredErrorCode],
 	);
 }
 

@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
 	  -webkit-font-smoothing: antialiased;
 	  font-synthesis: none;
   }
-	body {
+	body, #__next, main {
     width: 100%;
 		height: 100%;
 		margin: 0;
