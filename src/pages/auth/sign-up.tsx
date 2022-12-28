@@ -15,7 +15,7 @@ export default function SignUpPage() {
 			</Head>
 			<main>
 				<Box height={'100%'} display={'flex'} flexDirection={'column'}>
-					<AppHeader />
+					<AppHeader hideUser />
 					<SignUp />
 				</Box>
 			</main>

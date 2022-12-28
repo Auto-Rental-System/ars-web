@@ -30,7 +30,7 @@ export default function SignUp() {
 		},
 		{
 			onError: errorSnackbar,
-			onSuccess: () => router.push('/sign-in'),
+			onSuccess: () => router.push('/auth/sign-in'),
 		},
 	);
 

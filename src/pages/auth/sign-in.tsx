@@ -15,7 +15,7 @@ export default function SignInPage() {
 			</Head>
 			<main>
 				<Box height={'100%'} display={'flex'} flexDirection={'column'}>
-					<AppHeader />
+					<AppHeader hideUser />
 					<SignIn />
 				</Box>
 			</main>

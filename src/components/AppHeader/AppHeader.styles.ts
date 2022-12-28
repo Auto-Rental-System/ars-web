@@ -4,6 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 
 export const PagesMenu = styled(Menu).attrs({
 	anchorOrigin: {
@@ -77,4 +78,12 @@ export const LogoBlock = styled.div`
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
+`;
+
+export const AvatarButton = styled(IconButton)`
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	border-radius: 0;
+	color: ${({ theme }) => theme.palette.primary.contrastText};
 `;

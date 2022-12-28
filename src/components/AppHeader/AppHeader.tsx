@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useQuery } from 'react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import AppBar from '@mui/material/AppBar';
@@ -10,6 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
+import { entities } from 'consts/entities';
+import { UserService } from 'clients/CoreService';
+import { useSnackbarOnError } from 'hooks/notistack/useSnackbarOnError';
 import LogoIcon from 'assets/logo.svg';
 import {
 	PagesMenu,
@@ -22,12 +26,13 @@ import {
 	LogoBlock,
 	LogoWrapper,
 	MobileLogoWrapper,
+	AvatarButton,
 } from './AppHeader.styles';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function AvatarPopover() {
+function AvatarPopover({ name }: { name: string }) {
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
 	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,9 +46,10 @@ function AvatarPopover() {
 	return (
 		<div>
 			<Tooltip title='Open settings'>
-				<IconButton onClick={handleOpenUserMenu}>
+				<AvatarButton onClick={handleOpenUserMenu}>
+					<Typography>{name}</Typography>
 					<Avatar />
-				</IconButton>
+				</AvatarButton>
 			</Tooltip>
 			<SettingsMenu anchorEl={anchorElUser} open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
 				{settings.map(setting => (
@@ -67,7 +73,7 @@ function Logo() {
 	);
 }
 
-export default function AppHeader() {
+export default function AppHeader({ hideUser }: { hideUser?: boolean }) {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -76,6 +82,13 @@ export default function AppHeader() {
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
+
+	const { data: me } = useQuery(entities.me, UserService.getCurrent, {
+		onError: useSnackbarOnError(),
+		enabled: !hideUser,
+	});
+
+	console.log(me);
 
 	return (
 		<AppBar color={'primary'} position={'static'}>
@@ -109,7 +122,7 @@ export default function AppHeader() {
 						))}
 					</PagesWrapper>
 
-					<AvatarPopover />
+					{!hideUser && <AvatarPopover name={me ? `${me.firstName} ${me.lastName}` : ''} />}
 				</WToolbar>
 			</Container>
 		</AppBar>

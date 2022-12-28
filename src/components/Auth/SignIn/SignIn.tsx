@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
@@ -19,6 +20,7 @@ export default function SignIn() {
 	const [isCognitoLoading, setIsCognitoLoading] = useState<boolean>(false);
 	const [, setApiToken] = useApiToken();
 	const errorSnackbar = useSnackbarOnError();
+	const router = useRouter();
 
 	const onSubmit = async (e: any) => {
 		e.preventDefault();
@@ -42,11 +44,12 @@ export default function SignIn() {
 				RefreshToken: res.AuthenticationResult?.RefreshToken,
 				username: email,
 			});
+			setIsCognitoLoading(false);
+			router.push('/');
 		} catch (e) {
 			errorSnackbar(e);
+			setIsCognitoLoading(false);
 		}
-
-		setIsCognitoLoading(false);
 	};
 
 	return (
