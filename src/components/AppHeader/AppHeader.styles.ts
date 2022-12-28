@@ -90,6 +90,10 @@ export const AvatarButton = styled(IconButton)`
     font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
-    color: ${({ theme }) => theme.palette.primary.contrastText};	
+    color: ${({ theme }) => theme.palette.primary.contrastText};
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.values.md}px) {
+			display: none;
+    }
 	}
 `;
