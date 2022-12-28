@@ -33,6 +33,5 @@ const getAccessToken = (): null | ApiToken => {
 };
 
 const setAccessToken = (token: null | ApiToken) => {
-	console.log({ token });
 	localStorage.setItem(ACCOUNT_RESPONSE_KEY, JSON.stringify(token));
 };

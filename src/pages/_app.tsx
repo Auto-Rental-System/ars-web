@@ -8,7 +8,7 @@ import MuiStylesProvider from '@mui/styles/StylesProvider';
 import theme, { GlobalStyle } from 'themes';
 import { SnackbarProvider } from 'hooks/notistack/snackbar.provider';
 import { OpenAPI as CoreOpenAPi } from 'clients/CoreService';
-import { useAutoTokenRefresh } from 'hooks/auth/useAuthTokenRefresh';
+import { useAutoTokenRefresh } from 'hooks/auth';
 
 const queryClient = new QueryClient();
 

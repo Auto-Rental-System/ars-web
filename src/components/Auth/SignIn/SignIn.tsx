@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 import { Container, WTextField, AuthForm, LayoutContainer } from 'components/Auth/SignUp/SignUp.styles';
-import { useApiToken } from 'hooks/auth/useApiToken';
+import { useApiToken } from 'hooks/auth';
 import { hashCognitoSecret } from 'shared/util';
 import { useSnackbarOnError } from 'hooks/notistack/useSnackbarOnError';
 

@@ -1,8 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
-import { useApiToken, ApiToken } from 'hooks/auth/useApiToken';
-import { useLogout } from './useLogout';
+import { useApiToken, ApiToken, useLogout } from 'hooks/auth';
 import { hashCognitoSecret } from 'shared/util';
 
 export function useAutoTokenRefresh() {
