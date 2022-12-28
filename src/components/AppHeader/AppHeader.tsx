@@ -47,7 +47,7 @@ function AvatarPopover({ name }: { name: string }) {
 		<div>
 			<Tooltip title='Open settings'>
 				<AvatarButton onClick={handleOpenUserMenu}>
-					<Typography>{name}</Typography>
+					<Typography className={'name'}>{name}</Typography>
 					<Avatar />
 				</AvatarButton>
 			</Tooltip>
@@ -87,8 +87,6 @@ export default function AppHeader({ hideUser }: { hideUser?: boolean }) {
 		onError: useSnackbarOnError(),
 		enabled: !hideUser,
 	});
-
-	console.log(me);
 
 	return (
 		<AppBar color={'primary'} position={'static'}>
