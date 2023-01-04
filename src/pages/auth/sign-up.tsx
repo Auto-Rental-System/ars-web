@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import { SignUp } from 'components/Auth';
 import { AppHeader } from 'components/AppHeader';
 
+export const path = '/auth/sign-up';
+
 export default function SignUpPage() {
 	return (
 		<>

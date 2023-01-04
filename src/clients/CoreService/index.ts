@@ -8,6 +8,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { RegisterUserRequest } from './models/RegisterUserRequest';
 export type { UserResponse } from './models/UserResponse';
+export type { UserRole } from './models/UserRole';
 
 export { SystemService } from './services/SystemService';
 export { UserService } from './services/UserService';

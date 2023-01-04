@@ -7,7 +7,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { Container, WTextField, AuthForm, LayoutContainer } from 'components/Auth/SignUp/SignUp.styles';
 import { useApiToken } from 'hooks/auth';
 import { hashCognitoSecret } from 'shared/util';
-import { useSnackbarOnError } from 'hooks/notistack/useSnackbarOnError';
+import { useSnackbarOnError } from 'hooks/notistack';
 
 export default function SignIn() {
 	const region: string = process.env.NEXT_PUBLIC_COGNITO_REGION || '';

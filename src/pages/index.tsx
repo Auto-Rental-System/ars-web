@@ -2,6 +2,8 @@ import Head from 'next/head';
 
 import { AppHeader } from 'components/AppHeader';
 
+export const path = '/';
+
 export default function Home() {
 	return (
 		<>

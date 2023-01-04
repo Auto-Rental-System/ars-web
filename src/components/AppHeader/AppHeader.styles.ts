@@ -85,15 +85,15 @@ export const AvatarButton = styled(IconButton)`
 	align-items: center;
 	gap: 0.8rem;
 	border-radius: 0;
-	
-	.name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: ${({ theme }) => theme.palette.primary.contrastText};
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.values.md}px) {
+	.name {
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: ${({ theme }) => theme.palette.primary.contrastText};
+
+		@media (max-width: ${({ theme }) => theme.breakpoints.values.md}px) {
 			display: none;
-    }
+		}
 	}
 `;

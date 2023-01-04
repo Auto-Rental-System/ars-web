@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import { entities } from 'consts/entities';
 import { UserService } from 'clients/CoreService';
-import { useSnackbarOnError } from 'hooks/notistack/useSnackbarOnError';
+import { useSnackbarOnError } from 'hooks/notistack';
 import LogoIcon from 'assets/logo.svg';
 import {
 	PagesMenu,
