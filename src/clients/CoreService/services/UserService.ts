@@ -34,6 +34,9 @@ export class UserService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/users/current',
+            errors: {
+                401: `Unauthorized`,
+            },
         });
     }
 
