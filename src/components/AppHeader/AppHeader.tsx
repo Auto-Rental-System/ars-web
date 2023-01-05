@@ -51,7 +51,11 @@ function AvatarPopover({ name }: { name: string }) {
 					<Avatar />
 				</AvatarButton>
 			</Tooltip>
-			<SettingsMenu anchorEl={anchorElUser} open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}>
+			<SettingsMenu
+				anchorEl={anchorElUser}
+				open={Boolean(anchorElUser)}
+				onClose={handleCloseUserMenu}
+			>
 				{settings.map(setting => (
 					<MenuItem key={setting} onClick={handleCloseUserMenu}>
 						<Typography textAlign='center'>{setting}</Typography>
@@ -100,7 +104,11 @@ export default function AppHeader({ hideUser }: { hideUser?: boolean }) {
 						<IconButton size='large' onClick={handleOpenNavMenu} color={'inherit'}>
 							<MenuIcon />
 						</IconButton>
-						<PagesMenu anchorEl={anchorElNav} open={Boolean(anchorElNav)} onClose={handleCloseNavMenu}>
+						<PagesMenu
+							anchorEl={anchorElNav}
+							open={Boolean(anchorElNav)}
+							onClose={handleCloseNavMenu}
+						>
 							{pages.map(page => (
 								<MenuItem key={page} onClick={handleCloseNavMenu}>
 									<Typography textAlign='center'>{page}</Typography>

@@ -1,4 +1,12 @@
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 
 export class SharedStateStore<T> {
 	public static instance = new SharedStateStore();
@@ -21,7 +29,9 @@ export class SharedStateStore<T> {
 
 	unsubscribe(constant: string, listener: (newValue: T) => any | void) {
 		if (this.listeners[constant]) {
-			this.listeners[constant] = this.listeners[constant].filter(newListener => newListener !== listener);
+			this.listeners[constant] = this.listeners[constant].filter(
+				newListener => newListener !== listener,
+			);
 		}
 	}
 
@@ -33,7 +43,10 @@ export class SharedStateStore<T> {
 
 export const SharedStateContext = createContext<SharedStateStore<any>>(SharedStateStore.instance);
 
-export function useSharedStateDispatch<T>(constant: string, onChange?: Dispatch<T>): Dispatch<SetStateAction<T>> {
+export function useSharedStateDispatch<T>(
+	constant: string,
+	onChange?: Dispatch<T>,
+): Dispatch<SetStateAction<T>> {
 	const sharedState = useContext(SharedStateContext);
 
 	return useCallback(
@@ -68,7 +81,11 @@ export function useSharedStateValue<T>(constant: string, defaultValue?: T): T {
 
 export type SharedStateReturn<T> = [T, Dispatch<SetStateAction<T>>];
 
-export function useSharedState<T>(constant: string, defaultValue?: T, onChange?: Dispatch<T>): SharedStateReturn<T> {
+export function useSharedState<T>(
+	constant: string,
+	defaultValue?: T,
+	onChange?: Dispatch<T>,
+): SharedStateReturn<T> {
 	const value = useSharedStateValue<T>(constant, defaultValue);
 	const dispatch = useSharedStateDispatch<T>(constant, onChange);
 	return [value, dispatch];

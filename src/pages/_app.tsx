@@ -16,6 +16,7 @@ import { UserContextProvider, useRole } from 'context/UserContext';
 import { path as signInPath, default as SignInPage } from 'pages/auth/sign-in';
 import { path as signUpPath } from 'pages/auth/sign-up';
 import { path as homePath, default as HomePage } from 'pages/index';
+import { path as carsListPath } from 'pages/cars/index';
 
 const queryClient = new QueryClient();
 
@@ -24,25 +25,35 @@ CoreOpenAPi.BASE = process.env.NEXT_PUBLIC_CORE_URL as string;
 type RoutingRole = UserRole | 'NO_ROLE';
 
 function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) {
-	const routes: Array<{ path: string; roles: Array<RoutingRole> }> = useMemo(() => ([
-		{
-			path: signInPath,
-			roles: ['NO_ROLE'],
-		},
-		{
-			path: signUpPath,
-			roles: ['NO_ROLE'],
-		},
-		{
-			path: homePath,
-			roles: ['Renter', 'Landlord'],
-		},
-	]), []);
-	const defaultPages: Record<RoutingRole, { Component: () => JSX.Element; path: string }> = useMemo(() => ({
-		Renter: { Component: HomePage, path: homePath },
-		Landlord: { Component: HomePage, path: homePath },
-		NO_ROLE: { Component: SignInPage, path: signInPath },
-	}), []);
+	const routes: Array<{ path: string; roles: Array<RoutingRole> }> = useMemo(
+		() => [
+			{
+				path: signInPath,
+				roles: ['NO_ROLE'],
+			},
+			{
+				path: signUpPath,
+				roles: ['NO_ROLE'],
+			},
+			{
+				path: homePath,
+				roles: ['Renter', 'Landlord'],
+			},
+			{
+				path: carsListPath,
+				roles: ['Renter', 'Landlord', 'NO_ROLE'],
+			},
+		],
+		[],
+	);
+	const defaultPages: Record<RoutingRole, { Component: () => JSX.Element; path: string }> = useMemo(
+		() => ({
+			Renter: { Component: HomePage, path: homePath },
+			Landlord: { Component: HomePage, path: homePath },
+			NO_ROLE: { Component: SignInPage, path: signInPath },
+		}),
+		[],
+	);
 
 	const role: RoutingRole = useRole() || 'NO_ROLE';
 	const router = useRouter();
