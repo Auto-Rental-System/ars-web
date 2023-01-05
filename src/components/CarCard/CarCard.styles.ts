@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import ButtonBase from "@mui/material/ButtonBase";
-import Typography from "@mui/material/Typography";
+import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
 
 export const Container = styled(ButtonBase)`
 	width: 100%;
 	text-align: unset;
-	
+
 	border-radius: 0.5rem;
 	padding: 1rem;
 	border: 1px solid ${({ theme }) => theme.palette.primary.main};
@@ -37,10 +37,10 @@ export const CarImageMockup = styled.div`
 export const CarInfo = styled.div`
 	width: 0;
 	flex: 3;
-	
+
 	display: flex;
 	flex-direction: column;
-  position: relative;
+	position: relative;
 `;
 
 export const CarCharacteristics = styled.div`
@@ -63,7 +63,7 @@ export const CarCharacteristics = styled.div`
 
 export const CarDescription = styled(Typography)`
 	margin-top: 1rem;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 `;

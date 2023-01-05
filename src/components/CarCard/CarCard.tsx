@@ -33,7 +33,9 @@ export default function CarCard({ car }: CarCardProps) {
 				<Typography variant={'h6'}>
 					{car.brand} {car.model}
 				</Typography>
-				<Typography color={'primary'} variant={'h5'}>$ {car.price}</Typography>
+				<Typography color={'primary'} variant={'h5'}>
+					$ {car.price}
+				</Typography>
 				<CarCharacteristics>
 					<div className='characteristic'>
 						<Image className={'icon'} src={Fuel} alt={'Fuel'} />
