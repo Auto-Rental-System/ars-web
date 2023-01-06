@@ -1,26 +1,31 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TablePagination from '@mui/material/TablePagination';
 import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
 
-import Sort from 'assets/icons/sort.svg';
+import SortIcon from 'assets/icons/sort.svg';
 import { entities } from 'consts/entities';
 import { CarOrderBy, CarService, Order } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { CarCard } from 'components/CarCard';
+import { path as addCarPath } from 'pages/cars/add';
 import {
 	WLinearProgress,
 	ListHolder,
 	Header,
 	OrderByAutocomplete,
 	OrderButton,
+	AddButton,
 } from './CarsToRent.styles';
 
 export default function CarsToRent() {
+	const router = useRouter();
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(1);
 	const [orderBy, setOrderBy] = useState<CarOrderBy>('car.price');
@@ -64,11 +69,20 @@ export default function CarsToRent() {
 							onClick={() => setOrder(order === 'ASC' ? 'DESC' : 'ASC')}
 							disabled={isLoading}
 						>
-							<Image src={Sort} alt={'Sort'} className={'sort-icon'} />
+							<Image src={SortIcon} alt={'Sort'} className={'sort-icon'} />
 							<Typography variant={'body1'} color={'primary'}>
 								{order}
 							</Typography>
 						</OrderButton>
+						<AddButton
+							onClick={async () => {
+								await router.push(addCarPath);
+							}}
+							variant={'contained'}
+						>
+							<AddIcon />
+							<Typography>ADD NEW CAR</Typography>
+						</AddButton>
 					</Header>
 					<ListHolder>
 						{cars.list.map(car => (

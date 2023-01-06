@@ -14,6 +14,12 @@ export const Container = styled(ButtonBase)`
 	flex-direction: row;
 	gap: 1.5rem;
 	align-items: normal;
+
+	transition-duration: 0.2s;
+
+	&:hover {
+		background: ${({ theme }) => theme.colors.lightPrimary};
+	}
 `;
 
 export const CarImageWrapper = styled.div`

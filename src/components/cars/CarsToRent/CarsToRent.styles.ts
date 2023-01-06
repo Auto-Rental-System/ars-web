@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import LinearProgress from '@mui/material/LinearProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 
 export const WLinearProgress = styled(LinearProgress)``;
 
@@ -22,6 +23,16 @@ export const OrderButton = styled(IconButton).attrs({
 		height: 1.2rem;
 		width: 1.2rem;
 	}
+`;
+
+export const AddButton = styled(Button).attrs({
+	variant: 'contained',
+})`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.4rem 1rem;
+	margin-left: auto;
 `;
 
 export const Header = styled.div`

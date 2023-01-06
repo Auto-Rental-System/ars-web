@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Box from '@mui/material/Box';
 
 import { AppHeader } from 'components/AppHeader';
+import { AddCar } from 'components/cars/AddCar';
 
 export const path = '/cars/add';
 
@@ -17,7 +18,7 @@ export default function CarsPage() {
 			<main>
 				<Box height={'100%'} display={'flex'} flexDirection={'column'}>
 					<AppHeader />
-					Add car
+					<AddCar />
 				</Box>
 			</main>
 		</>

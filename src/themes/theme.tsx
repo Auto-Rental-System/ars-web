@@ -5,6 +5,7 @@ import { shadows } from './shadows';
 
 export const colors = {
 	strokes: '#B3B3B3',
+	lightPrimary: '#EEF4F5',
 };
 
 const themeOptions: ThemeOptions = {
