@@ -10,12 +10,19 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import LinearProgress from '@mui/material/LinearProgress';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { CarService, Fuel, Gearbox } from 'clients/CoreService';
 import { path as carsListPath } from 'pages/cars/index';
 import { useSnackbarOnError } from 'hooks/notistack';
 import Camera from 'assets/icons/camera.svg';
-import { AddImage } from './AddCar.styles';
+import {
+	AddImage,
+	ImageWrapper,
+	MainImageWrapper,
+	MainImageCheckbox,
+	CloseButton,
+} from './AddCar.styles';
 
 export default function AddCar() {
 	const router = useRouter();
@@ -28,6 +35,8 @@ export default function AddCar() {
 	const [fuelConsumption, setFuelConsumption] = useState<number>(8);
 	const [pledge, setPledge] = useState<number>(1000);
 	const [price, setPrice] = useState<number>(10);
+	const [images, setImages] = useState<Array<{ name: string; src: string }>>([]);
+	const [titleImageName, setTitleImageName] = useState<string>('');
 
 	const { mutate: createCar, isLoading } = useMutation(
 		() =>
@@ -56,38 +65,86 @@ export default function AddCar() {
 					Add Car
 				</Typography>
 				<Grid container spacing={2}>
-					<Grid item container xs={6} spacing={2}>
-						<Grid item xs={12}>
-							<TextField
-								label={'Brand'}
-								value={brand}
-								onChange={e => setBrand(e.target.value)}
-								fullWidth
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								label={'Model'}
-								value={model}
-								onChange={e => setModel(e.target.value)}
-								fullWidth
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								label={'Description'}
-								value={description}
-								onChange={e => setDescription(e.target.value)}
-								fullWidth
-								multiline
-								rows={7}
-							/>
+					<Grid item xs={12} container spacing={1} justifyContent={'flex-start'}>
+						{images.map(image => (
+							<Grid item>
+								<ImageWrapper onClick={() => setTitleImageName(image.name)}>
+									<img src={image.src} alt={'Image'} />
+									<MainImageWrapper>
+										<MainImageCheckbox checked={image.name === titleImageName} />
+										<Typography variant={'subtitle2'} color={'primary'}>
+											Main Image
+										</Typography>
+									</MainImageWrapper>
+									<CloseButton
+										onClick={e => {
+											e.stopPropagation();
+											setImages(images => images.filter(i => i.name !== image.name));
+										}}
+									>
+										<CloseIcon />
+									</CloseButton>
+								</ImageWrapper>
+							</Grid>
+						))}
+						<Grid item>
+							<label>
+								<AddImage>
+									<Image src={Camera} alt={'Camera'} className={'camera-icon'} />
+									<input
+										type={'file'}
+										multiple
+										onChange={e => {
+											const files = Array.from(e.target.files || []);
+
+											files.forEach(file => {
+												const reader = new FileReader();
+												reader.readAsDataURL(file);
+												reader.onloadend = function (e) {
+													setImages(
+														images =>
+															[...images, { name: file.name, src: reader.result }] as Array<{
+																name: string;
+																src: string;
+															}>,
+													);
+													setTitleImageName(titleImageName || images[0]?.name || '');
+												};
+											});
+										}}
+									/>
+									<Typography variant={'subtitle2'} color={'primary'}>
+										Add Image
+									</Typography>
+								</AddImage>
+							</label>
 						</Grid>
 					</Grid>
-					<Grid item flex={1}>
-						<AddImage>
-							<Image src={Camera} alt={'Camera'} className={'camera-icon'} />
-						</AddImage>
+					<Grid item xs={6}>
+						<TextField
+							label={'Brand'}
+							value={brand}
+							onChange={e => setBrand(e.target.value)}
+							fullWidth
+						/>
+					</Grid>
+					<Grid item xs={6}>
+						<TextField
+							label={'Model'}
+							value={model}
+							onChange={e => setModel(e.target.value)}
+							fullWidth
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<TextField
+							label={'Description'}
+							value={description}
+							onChange={e => setDescription(e.target.value)}
+							fullWidth
+							multiline
+							rows={4}
+						/>
 					</Grid>
 					<Grid item xs={6}>
 						<Autocomplete
@@ -119,9 +176,8 @@ export default function AddCar() {
 								min: 0.1,
 								max: 9.9,
 							}}
-							InputLabelProps={{
-								shrink: true,
-							}}
+							InputLabelProps={{ shrink: true }}
+							InputProps={{ startAdornment: <InputAdornment position='start'>L</InputAdornment> }}
 							value={engineCapacity}
 							onChange={e => {
 								const value = parseFloat(e.target.value);
@@ -141,8 +197,9 @@ export default function AddCar() {
 								min: 0.1,
 								max: 99.9,
 							}}
-							InputLabelProps={{
-								shrink: true,
+							InputLabelProps={{ shrink: true }}
+							InputProps={{
+								startAdornment: <InputAdornment position='start'>l/100km</InputAdornment>,
 							}}
 							value={fuelConsumption}
 							onChange={e => {
