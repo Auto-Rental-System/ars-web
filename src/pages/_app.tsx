@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -11,12 +11,13 @@ import theme, { GlobalStyle } from 'themes';
 import { SnackbarProvider } from 'hooks/notistack';
 import { OpenAPI as CoreOpenAPi, UserRole } from 'clients/CoreService';
 import { useAutoTokenRefresh } from 'hooks/auth';
-import { UserContextProvider, useRole } from 'context/UserContext';
+import { UserContext, UserContextProvider, useRole } from 'context/UserContext';
 
 import { path as signInPath, default as SignInPage } from 'pages/auth/sign-in';
 import { path as signUpPath } from 'pages/auth/sign-up';
 import { path as homePath, default as HomePage } from 'pages/index';
 import { path as carsListPath } from 'pages/cars/index';
+import { path as addCarPage } from 'pages/cars/add';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,10 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 				path: carsListPath,
 				roles: ['Renter', 'Landlord', 'NO_ROLE'],
 			},
+			{
+				path: addCarPage,
+				roles: ['Landlord'],
+			},
 		],
 		[],
 	);
@@ -55,6 +60,7 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 		[],
 	);
 
+	const userContext = useContext(UserContext);
 	const role: RoutingRole = useRole() || 'NO_ROLE';
 	const router = useRouter();
 
@@ -63,11 +69,11 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 
 	useEffect(() => {
 		const route = routes.find(route => route.path === router.route);
-		if (route && !route.roles.includes(role)) {
+		if (route && !route.roles.includes(role) && userContext.isLoaded) {
 			const page = defaultPages[role];
 			router.replace(page.path).then(() => setReplaceComponent(true));
 		}
-	}, [router, role, setReplaceComponent, defaultPages, routes]);
+	}, [router, role, setReplaceComponent, defaultPages, routes, userContext.isLoaded]);
 
 	if (replaceComponent) {
 		const DefaultComponent = defaultPages[role].Component;
