@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CarImageRequest } from './CarImageRequest';
+
 export type UpdateCarRequest = {
     brand: string;
     model: string;
@@ -12,6 +14,6 @@ export type UpdateCarRequest = {
     fuelConsumption: number;
     pledge: number;
     price: number;
-    images: Array<string>;
+    images: Array<CarImageRequest>;
 };
 

@@ -23,6 +23,7 @@ import {
 	MainImageCheckbox,
 	CloseButton,
 } from './AddCar.styles';
+import { sendFile } from './AddCar.utils';
 
 export default function AddCar() {
 	const router = useRouter();
@@ -35,12 +36,13 @@ export default function AddCar() {
 	const [fuelConsumption, setFuelConsumption] = useState<number>(8);
 	const [pledge, setPledge] = useState<number>(1000);
 	const [price, setPrice] = useState<number>(10);
-	const [images, setImages] = useState<Array<{ name: string; src: string }>>([]);
+	const [images, setImages] = useState<Array<{ file: File; src: string }>>([]);
 	const [titleImageName, setTitleImageName] = useState<string>('');
+	const onError = useSnackbarOnError();
 
 	const { mutate: createCar, isLoading } = useMutation(
-		() =>
-			CarService.create({
+		async () => {
+			const car = await CarService.create({
 				brand,
 				model,
 				description,
@@ -50,10 +52,33 @@ export default function AddCar() {
 				fuelConsumption,
 				pledge,
 				price,
-			}),
+			});
+
+			const filenames = images.map(image => image.file.name);
+			const postUrls = await CarService.getImagesSignedPostUrls(car.id, filenames);
+
+			await Promise.all(
+				images.map(async image => {
+					try {
+						const url = postUrls.list.find(u => u.filename === image.file.name);
+						await sendFile(url!, image.file);
+					} catch (e) {
+						onError(e);
+					}
+				}),
+			);
+
+			return CarService.update(car.id, {
+				...car,
+				images: images.map(image => ({
+					filename: image.file.name,
+					isTitle: image.file.name === titleImageName,
+				})),
+			});
+		},
 		{
 			onSuccess: () => router.push(carsListPath),
-			onError: useSnackbarOnError(),
+			onError: onError,
 		},
 	);
 
@@ -68,10 +93,10 @@ export default function AddCar() {
 					<Grid item xs={12} container spacing={1} justifyContent={'flex-start'}>
 						{images.map(image => (
 							<Grid item>
-								<ImageWrapper onClick={() => setTitleImageName(image.name)}>
+								<ImageWrapper onClick={() => setTitleImageName(image.file.name)}>
 									<img src={image.src} alt={'Image'} />
 									<MainImageWrapper>
-										<MainImageCheckbox checked={image.name === titleImageName} />
+										<MainImageCheckbox checked={image.file.name === titleImageName} />
 										<Typography variant={'subtitle2'} color={'primary'}>
 											Main Image
 										</Typography>
@@ -79,7 +104,11 @@ export default function AddCar() {
 									<CloseButton
 										onClick={e => {
 											e.stopPropagation();
-											setImages(images => images.filter(i => i.name !== image.name));
+											setImages(images => images.filter(i => i.file.name !== image.file.name));
+
+											if (image.file.name === titleImageName) {
+												setTitleImageName(images[0]?.file.name || '');
+											}
 										}}
 									>
 										<CloseIcon />
@@ -103,14 +132,15 @@ export default function AddCar() {
 												reader.onloadend = function (e) {
 													setImages(
 														images =>
-															[...images, { name: file.name, src: reader.result }] as Array<{
-																name: string;
+															[...images, { file, src: reader.result }] as Array<{
+																file: File;
 																src: string;
 															}>,
 													);
-													setTitleImageName(titleImageName || images[0]?.name || '');
 												};
 											});
+
+											setTitleImageName(titleImageName || images[0]?.file.name || '');
 										}}
 									/>
 									<Typography variant={'subtitle2'} color={'primary'}>

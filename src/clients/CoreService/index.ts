@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { CarImageRequest } from './models/CarImageRequest';
 export type { CarImageResponse } from './models/CarImageResponse';
 export type { CarImagesSignedPostUrlResponse } from './models/CarImagesSignedPostUrlResponse';
 export type { CarListItemResponse } from './models/CarListItemResponse';

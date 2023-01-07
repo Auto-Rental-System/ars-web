@@ -23,16 +23,13 @@ export const Container = styled(ButtonBase)`
 `;
 
 export const CarImageWrapper = styled.div`
-	flex: 2;
+	flex: 1;
 	height: auto;
-`;
-
-export const CarImageMockup = styled.div`
 	background: ${({ theme }) => theme.palette.grey['800']};
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 100%;
+	position: relative;
 
 	.image-mockup {
 		height: 3rem;
@@ -42,7 +39,7 @@ export const CarImageMockup = styled.div`
 
 export const CarInfo = styled.div`
 	width: 0;
-	flex: 3;
+	flex: 2;
 
 	display: flex;
 	flex-direction: column;
@@ -70,6 +67,9 @@ export const CarCharacteristics = styled.div`
 export const CarDescription = styled(Typography)`
 	margin-top: 1rem;
 	overflow: hidden;
-	white-space: nowrap;
+	display: -webkit-box;
+	// to display description in 2 lines
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
 	text-overflow: ellipsis;
 `;

@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import {
 	Container,
 	CarInfo,
-	CarImageMockup,
 	CarImageWrapper,
 	CarCharacteristics,
 	CarDescription,
@@ -22,11 +21,9 @@ export default function CarCard({ car }: CarCardProps) {
 		<Container>
 			<CarImageWrapper>
 				{car.titleImage ? (
-					<Image src={car.titleImage.url} alt={car.brand} />
+					<Image src={car.titleImage.url} fill priority objectFit={'cover'} alt={car.brand} />
 				) : (
-					<CarImageMockup>
-						<Image src={Camera} alt={'Camera'} className={'image-mockup'} />
-					</CarImageMockup>
+					<Image src={Camera} alt={'Camera'} className={'image-mockup'} />
 				)}
 			</CarImageWrapper>
 			<CarInfo>

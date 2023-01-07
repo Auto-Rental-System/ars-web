@@ -1,7 +1,7 @@
 export const sendFile = (
 	{ url, fields }: { url: string; fields: Record<string, string> },
 	file: File,
-	cb: (progress: number) => any,
+	cb: (progress: number) => any = () => {},
 ) => {
 	const request = new XMLHttpRequest();
 	request.open('POST', url);
