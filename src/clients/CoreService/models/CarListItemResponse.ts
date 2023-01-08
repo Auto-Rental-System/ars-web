@@ -17,6 +17,6 @@ export type CarListItemResponse = {
     fuelConsumption: number;
     pledge: number;
     price: number;
-    titleImage: CarImageResponse;
+    titleImage?: CarImageResponse;
 };
 
