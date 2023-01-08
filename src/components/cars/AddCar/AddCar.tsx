@@ -117,37 +117,35 @@ export default function AddCar() {
 							</Grid>
 						))}
 						<Grid item>
-							<label>
-								<AddImage>
-									<Image src={Camera} alt={'Camera'} className={'camera-icon'} />
-									<input
-										type={'file'}
-										multiple
-										onChange={e => {
-											const files = Array.from(e.target.files || []);
+							<AddImage>
+								<Image src={Camera} alt={'Camera'} className={'camera-icon'} />
+								<input
+									type={'file'}
+									multiple
+									onChange={e => {
+										const files = Array.from(e.target.files || []);
 
-											files.forEach(file => {
-												const reader = new FileReader();
-												reader.readAsDataURL(file);
-												reader.onloadend = function (e) {
-													setImages(
-														images =>
-															[...images, { file, src: reader.result }] as Array<{
-																file: File;
-																src: string;
-															}>,
-													);
-												};
-											});
+										files.forEach(file => {
+											const reader = new FileReader();
+											reader.readAsDataURL(file);
+											reader.onloadend = function (e) {
+												setImages(
+													images =>
+														[...images, { file, src: reader.result }] as Array<{
+															file: File;
+															src: string;
+														}>,
+												);
+											};
+										});
 
-											setTitleImageName(titleImageName || images[0]?.file.name || '');
-										}}
-									/>
-									<Typography variant={'subtitle2'} color={'primary'}>
-										Add Image
-									</Typography>
-								</AddImage>
-							</label>
+										setTitleImageName(titleImageName || images[0]?.file.name || '');
+									}}
+								/>
+								<Typography variant={'subtitle2'} color={'primary'}>
+									Add Image
+								</Typography>
+							</AddImage>
 						</Grid>
 					</Grid>
 					<Grid item xs={6}>

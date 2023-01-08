@@ -49,7 +49,7 @@ export const WCalendar = styled(Calendar).attrs({
 		margin-top: 1rem;
 		width: 100%;
 		border-radius: 0.5rem;
-		border: 1px solid ${({ theme }) => theme.palette.primary.main};
+		border: 2px solid ${({ theme }) => theme.palette.primary.main};
 	}
 
 	.react-calendar__month-view__days {
@@ -70,11 +70,6 @@ export const WCalendar = styled(Calendar).attrs({
 
 		button.react-calendar__month-view__days__day--weekend {
 			color: ${({ theme }) => theme.palette.secondary.main};
-		}
-
-		button.react-calendar__tile--active {
-			color: ${({ theme }) => theme.palette.primary.contrastText};
-			background: ${({ theme }) => theme.palette.primary.main};
 		}
 
 		button.active:not(.first-day, .last-day) {

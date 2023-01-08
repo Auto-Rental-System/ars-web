@@ -4,7 +4,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
-export const WLinearProgress = styled(LinearProgress)``;
+export const WLinearProgress = styled(LinearProgress)`
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+`;
 
 export const ListHolder = styled.div`
 	display: flex;

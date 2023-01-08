@@ -19,11 +19,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-calendar/dist/Calendar.css';
 
 import { CarCharacteristics } from 'components/CarCharacteristics';
-import { WSlider, Slide, NextButton, PrevButton, WCalendar } from './SingleCar.styles';
-import { SingleCarProps } from '.';
-import { CarService, DetailedCarResponse, RentalOrderResponse } from 'clients/CoreService';
+import { CarService, RentalOrderResponse } from 'clients/CoreService';
 import { useSnackbarOnError, useSnackbarOnSuccess } from 'hooks/notistack';
 import { entities } from 'consts/entities';
+import { WSlider, Slide, NextButton, PrevButton, WCalendar } from './SingleCar.styles';
+import { SingleCarProps } from '.';
 
 function ArrowNext({ onClick }: CustomArrowProps) {
 	return (
@@ -91,7 +91,9 @@ export default function SingleCar({ car }: SingleCarProps) {
 	) => {
 		const activeRentalOrder = getActiveRentalOrder(date, car.rentalOrders);
 
-		return <PickersDay {...pickersDayProps} disabled={!!activeRentalOrder || date.isBefore(dayjs())} />;
+		return (
+			<PickersDay {...pickersDayProps} disabled={!!activeRentalOrder || date.isBefore(dayjs())} />
+		);
 	};
 
 	return (
