@@ -27,7 +27,7 @@ import {
 export default function CarsToRent() {
 	const router = useRouter();
 	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(1);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [orderBy, setOrderBy] = useState<CarOrderBy>('car.price');
 	const [order, setOrder] = useState<Order>('ASC');
 	const { data: cars, isLoading } = useQuery(
@@ -87,7 +87,7 @@ export default function CarsToRent() {
 					<ListHolder>
 						{cars.list.map(car => (
 							<Grid item>
-								<CarCard car={car} />
+								<CarCard car={car} onClick={() => router.push(`/cars/${car.id}`)} />
 							</Grid>
 						))}
 					</ListHolder>
@@ -95,7 +95,7 @@ export default function CarsToRent() {
 						component={'div'}
 						count={cars.total}
 						page={page}
-						rowsPerPageOptions={[1, 3, 5]}
+						rowsPerPageOptions={[2, 5, 10]}
 						onPageChange={(_, newPage) => setPage(newPage)}
 						rowsPerPage={rowsPerPage}
 						onRowsPerPageChange={event => {

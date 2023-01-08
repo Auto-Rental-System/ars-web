@@ -4,6 +4,8 @@ import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import MuiStylesProvider from '@mui/styles/StylesProvider';
 
@@ -17,7 +19,8 @@ import { path as signInPath, default as SignInPage } from 'pages/auth/sign-in';
 import { path as signUpPath } from 'pages/auth/sign-up';
 import { path as homePath, default as HomePage } from 'pages/index';
 import { path as carsListPath } from 'pages/cars/index';
-import { path as addCarPage } from 'pages/cars/add';
+import { path as addCarPath } from 'pages/cars/add';
+import { path as singleCarPath } from 'pages/cars/[id]';
 
 const queryClient = new QueryClient();
 
@@ -45,7 +48,11 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 				roles: ['Renter', 'Landlord', 'NO_ROLE'],
 			},
 			{
-				path: addCarPage,
+				path: addCarPath,
+				roles: ['Landlord'],
+			},
+			{
+				path: singleCarPath,
 				roles: ['Landlord'],
 			},
 		],
@@ -93,12 +100,14 @@ export default function App({ Component, pageProps }: AppProps) {
 				<MuiStylesProvider injectFirst>
 					<StyledEngineProvider injectFirst>
 						<MuiThemeProvider theme={theme}>
-							<SnackbarProvider>
-								<UserContextProvider>
-									<GlobalStyle />
-									<Routing Component={Component} pageProps={pageProps} />
-								</UserContextProvider>
-							</SnackbarProvider>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<SnackbarProvider>
+									<UserContextProvider>
+										<GlobalStyle />
+										<Routing Component={Component} pageProps={pageProps} />
+									</UserContextProvider>
+								</SnackbarProvider>
+							</LocalizationProvider>
 						</MuiThemeProvider>
 					</StyledEngineProvider>
 				</MuiStylesProvider>
