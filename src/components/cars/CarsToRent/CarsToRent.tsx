@@ -34,6 +34,7 @@ export default function CarsToRent() {
 		[entities.carsToRent, page, rowsPerPage, order, orderBy],
 		() => CarService.getAllCars(page + 1, rowsPerPage, order, orderBy),
 		{
+			refetchOnWindowFocus: false,
 			keepPreviousData: true,
 			onError: useSnackbarOnError(),
 		},

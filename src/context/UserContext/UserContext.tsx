@@ -15,7 +15,7 @@ export const useRole = () => useContext(UserContext).user?.role;
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
 	const [apiToken] = useApiToken();
 	const [isLoaded, setIsLoaded] = useState(!apiToken);
-	const { data: user } = useQuery([entities.contextUser], UserService.getCurrent, {
+	const { data: user } = useQuery([entities.contextUser, apiToken], UserService.getCurrent, {
 		enabled: !!apiToken,
 		onError: useSnackbarOnError(),
 		onSettled: () => setIsLoaded(true),

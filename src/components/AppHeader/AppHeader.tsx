@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useQuery } from 'react-query';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -14,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { entities } from 'consts/entities';
 import { UserService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
+import { useLogout } from 'hooks/auth';
 import LogoIcon from 'assets/logo.svg';
 import {
 	PagesMenu,
@@ -29,11 +31,27 @@ import {
 	AvatarButton,
 } from './AppHeader.styles';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { path as carsPath } from 'pages/cars/index';
 
 function AvatarPopover({ name }: { name: string }) {
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+	const logout = useLogout();
+	const settings: Array<{ name: string; onClick: () => any }> = [
+		{
+			name: 'Profile',
+			onClick: () => {
+				setAnchorElUser(null);
+				console.log('profile');
+			},
+		},
+		{
+			name: 'Logout',
+			onClick: () => {
+				setAnchorElUser(null);
+				return logout();
+			},
+		},
+	];
 
 	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElUser(event.currentTarget);
@@ -57,8 +75,8 @@ function AvatarPopover({ name }: { name: string }) {
 				onClose={handleCloseUserMenu}
 			>
 				{settings.map(setting => (
-					<MenuItem key={setting} onClick={handleCloseUserMenu}>
-						<Typography textAlign='center'>{setting}</Typography>
+					<MenuItem key={setting.name} onClick={setting.onClick}>
+						<Typography textAlign='center'>{setting.name}</Typography>
 					</MenuItem>
 				))}
 			</SettingsMenu>
@@ -77,8 +95,17 @@ function Logo() {
 	);
 }
 
-export default function AppHeader({ hideUser }: { hideUser?: boolean }) {
+export default function AppHeader({
+	hideUser,
+	hideNavigation,
+}: {
+	hideUser?: boolean;
+	hideNavigation?: boolean;
+}) {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+	const router = useRouter();
+
+	const pages: Array<{ name: string; href: string }> = [{ name: 'Cars', href: carsPath }];
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -101,32 +128,38 @@ export default function AppHeader({ hideUser }: { hideUser?: boolean }) {
 					</LogoWrapper>
 
 					<MobilePagesWrapper>
-						<IconButton size='large' onClick={handleOpenNavMenu} color={'inherit'}>
-							<MenuIcon />
-						</IconButton>
-						<PagesMenu
-							anchorEl={anchorElNav}
-							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
-						>
-							{pages.map(page => (
-								<MenuItem key={page} onClick={handleCloseNavMenu}>
-									<Typography textAlign='center'>{page}</Typography>
-								</MenuItem>
-							))}
-						</PagesMenu>
+						{!hideNavigation && (
+							<>
+								<IconButton size='large' onClick={handleOpenNavMenu} color={'inherit'}>
+									<MenuIcon />
+								</IconButton>
+								<PagesMenu
+									anchorEl={anchorElNav}
+									open={Boolean(anchorElNav)}
+									onClose={handleCloseNavMenu}
+								>
+									{pages.map(page => (
+										<MenuItem key={page.name} onClick={() => router.push(page.href)}>
+											<Typography textAlign='center'>{page.name}</Typography>
+										</MenuItem>
+									))}
+								</PagesMenu>
+							</>
+						)}
 					</MobilePagesWrapper>
 					<MobileLogoWrapper>
 						<Logo />
 					</MobileLogoWrapper>
 
-					<PagesWrapper>
-						{pages.map(page => (
-							<PageButton key={page} onClick={handleCloseNavMenu}>
-								{page}
-							</PageButton>
-						))}
-					</PagesWrapper>
+					{!hideNavigation && (
+						<PagesWrapper>
+							{pages.map(page => (
+								<PageButton key={page.name} onClick={() => router.push(page.href)}>
+									{page.name}
+								</PageButton>
+							))}
+						</PagesWrapper>
+					)}
 
 					{!hideUser && <AvatarPopover name={me ? `${me.firstName} ${me.lastName}` : ''} />}
 				</WToolbar>

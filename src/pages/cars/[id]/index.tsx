@@ -16,10 +16,15 @@ export default function CarPage() {
 	const router = useRouter();
 	const id = parseInt(router.query.id as string);
 
-	const { data: car, isLoading } = useQuery([entities.singleCar], () => CarService.getById(id), {
-		onError: useSnackbarOnError(),
-		enabled: !!id,
-	});
+	const { data: car, isLoading } = useQuery(
+		[entities.singleCar, id],
+		() => CarService.getById(id),
+		{
+			refetchOnWindowFocus: false,
+			onError: useSnackbarOnError(),
+			enabled: !!id,
+		},
+	);
 
 	return (
 		<>
