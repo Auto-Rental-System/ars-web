@@ -23,6 +23,7 @@ export default function VerifyAccount() {
 	const clientId: string = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || '';
 	const clientSecret: string = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET || '';
 	const provider = new CognitoIdentityProvider({ region });
+	const [code, setCode] = useState('');
 	const router = useRouter();
 
 	useEffect(() => {
@@ -33,8 +34,6 @@ export default function VerifyAccount() {
 			router.push(homePath);
 		}
 	}, [router]);
-
-	const [code, setCode] = useState('');
 
 	const { mutate: verify, isLoading } = useMutation(
 		() => {
