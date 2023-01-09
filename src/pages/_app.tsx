@@ -22,6 +22,7 @@ import { path as homePath, default as HomePage } from 'pages/index';
 import { path as carsListPath } from 'pages/cars/index';
 import { path as addCarPath } from 'pages/cars/add';
 import { path as singleCarPath } from 'pages/cars/[id]';
+import { path as profilePath } from 'pages/profile';
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,10 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 			{
 				path: singleCarPath,
 				roles: ['Landlord'],
+			},
+			{
+				path: profilePath,
+				roles: ['Renter', 'Landlord'],
 			},
 		],
 		[],

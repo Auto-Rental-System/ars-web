@@ -32,17 +32,16 @@ import {
 } from './AppHeader.styles';
 
 import { path as carsPath } from 'pages/cars/index';
+import { path as profilePath } from 'pages/profile';
 
 function AvatarPopover({ name }: { name: string }) {
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 	const logout = useLogout();
+	const router = useRouter();
 	const settings: Array<{ name: string; onClick: () => any }> = [
 		{
 			name: 'Profile',
-			onClick: () => {
-				setAnchorElUser(null);
-				console.log('profile');
-			},
+			onClick: () => router.push(profilePath),
 		},
 		{
 			name: 'Logout',
