@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useMutation } from 'react-query';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
@@ -22,40 +22,33 @@ export default function SignIn() {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [isCognitoLoading, setIsCognitoLoading] = useState<boolean>(false);
 	const [, setApiToken] = useApiToken();
-	const errorSnackbar = useSnackbarOnError();
-	const router = useRouter();
 
-	const onSubmit = async (e: any) => {
-		e.preventDefault();
-		setIsCognitoLoading(true);
+	const { mutate: signIn, isLoading } = useMutation(
+		() => {
+			const params = {
+				ClientId: clientId,
+				AuthFlow: 'USER_PASSWORD_AUTH',
+				AuthParameters: {
+					USERNAME: email,
+					PASSWORD: password,
+					SECRET_HASH: hashCognitoSecret(clientSecret, email, clientId),
+				},
+			};
 
-		const params = {
-			ClientId: clientId,
-			AuthFlow: 'USER_PASSWORD_AUTH',
-			AuthParameters: {
-				USERNAME: email,
-				PASSWORD: password,
-				SECRET_HASH: hashCognitoSecret(clientSecret, email, clientId),
+			return provider.initiateAuth(params);
+		},
+		{
+			onSuccess: res => {
+				setApiToken({
+					AccessToken: res.AuthenticationResult?.AccessToken,
+					RefreshToken: res.AuthenticationResult?.RefreshToken,
+					username: email,
+				});
 			},
-		};
-
-		try {
-			const res = await provider.initiateAuth(params);
-
-			setApiToken({
-				AccessToken: res.AuthenticationResult?.AccessToken,
-				RefreshToken: res.AuthenticationResult?.RefreshToken,
-				username: email,
-			});
-			setIsCognitoLoading(false);
-			router.push('/');
-		} catch (e) {
-			errorSnackbar(e);
-			setIsCognitoLoading(false);
-		}
-	};
+			onError: useSnackbarOnError(),
+		},
+	);
 
 	return (
 		<Container>
@@ -77,7 +70,7 @@ export default function SignIn() {
 						value={password}
 						onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
 					/>
-					<Button disabled={isCognitoLoading} variant={'outlined'} onClick={onSubmit}>
+					<Button disabled={isLoading} variant={'outlined'} onClick={() => signIn()}>
 						Sign In
 					</Button>
 				</AuthForm>
