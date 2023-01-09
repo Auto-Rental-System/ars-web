@@ -7,9 +7,4 @@ export const WAvatar = styled(Avatar).attrs({
 })`
 	height: 15rem;
 	width: 15rem;
-
-	//.MuiSvgIcon-root {
-	//	height: 10rem;
-	//	width: 10rem;
-	//}
 `;
