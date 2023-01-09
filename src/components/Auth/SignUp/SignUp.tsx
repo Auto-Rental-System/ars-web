@@ -1,4 +1,5 @@
-import { useRouter } from 'next/navigation';
+import Router from 'next/router';
+import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useState, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
@@ -8,6 +9,8 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { hashCognitoSecret } from 'shared/util';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { UserService } from 'clients/CoreService';
+import { path as verifyAccountPath } from 'pages/auth/verify';
+import { path as signInPath } from 'pages/auth/sign-in';
 import { Container, WTextField, AuthForm, LayoutContainer } from './SignUp.styles';
 
 export default function SignUp() {
@@ -20,7 +23,6 @@ export default function SignUp() {
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const router = useRouter();
 
 	const { mutate: registerUser, isLoading } = useMutation(
 		async () => {
@@ -46,7 +48,7 @@ export default function SignUp() {
 		},
 		{
 			onError: useSnackbarOnError(),
-			onSuccess: () => router.push('/auth/sign-in'),
+			onSuccess: () => Router.push({ pathname: verifyAccountPath, query: { email } }),
 		},
 	);
 
@@ -92,6 +94,11 @@ export default function SignUp() {
 					>
 						Sign Up
 					</Button>
+					<Link href={signInPath}>
+						<Typography color={'primary'} mt={0}>
+							Already have an account? Sign In
+						</Typography>
+					</Link>
 				</AuthForm>
 			</LayoutContainer>
 		</Container>

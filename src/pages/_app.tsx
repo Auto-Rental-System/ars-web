@@ -17,6 +17,7 @@ import { UserContext, UserContextProvider, useRole } from 'context/UserContext';
 
 import { path as signInPath, default as SignInPage } from 'pages/auth/sign-in';
 import { path as signUpPath } from 'pages/auth/sign-up';
+import { path as verifyAccountPath } from 'pages/auth/verify';
 import { path as homePath, default as HomePage } from 'pages/index';
 import { path as carsListPath } from 'pages/cars/index';
 import { path as addCarPath } from 'pages/cars/add';
@@ -37,6 +38,10 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 			},
 			{
 				path: signUpPath,
+				roles: ['NO_ROLE'],
+			},
+			{
+				path: verifyAccountPath,
 				roles: ['NO_ROLE'],
 			},
 			{
