@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import { AppHeader } from 'components/AppHeader';
-import { SingleCar } from 'components/cars/SingleCar';
+import { SingleCar } from 'components/Cars/SingleCar';
 import { entities } from 'consts/entities';
 import { CarService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';

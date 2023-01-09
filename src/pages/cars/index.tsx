@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 
-import { CarsToRent } from 'components/cars/CarsToRent';
+import { CarsToRent } from 'components/Cars/CarsToRent';
 import { AppHeader } from 'components/AppHeader';
 
 export const path = '/cars';
