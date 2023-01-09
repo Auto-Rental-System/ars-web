@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState, ChangeEvent } from 'react';
 import { useMutation } from 'react-query';
 import Typography from '@mui/material/Typography';
@@ -13,6 +14,7 @@ import {
 import { useApiToken } from 'hooks/auth';
 import { hashCognitoSecret } from 'shared/util';
 import { useSnackbarOnError } from 'hooks/notistack';
+import { path as signUpPath } from 'pages/auth/sign-up';
 
 export default function SignIn() {
 	const region: string = process.env.NEXT_PUBLIC_COGNITO_REGION || '';
@@ -73,6 +75,11 @@ export default function SignIn() {
 					<Button disabled={isLoading} variant={'outlined'} onClick={() => signIn()}>
 						Sign In
 					</Button>
+					<Link href={signUpPath}>
+						<Typography color={'primary'} mt={0}>
+							Don't have an account? Sign Up
+						</Typography>
+					</Link>
 				</AuthForm>
 			</LayoutContainer>
 		</Container>
