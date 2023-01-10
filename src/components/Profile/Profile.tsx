@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import { UserContext } from 'context/UserContext';
 import { useApiToken } from 'hooks/auth';
 import { useSnackbarOnError, useSnackbarOnSuccess } from 'hooks/notistack';
+import { UserService } from 'clients/CoreService';
+import { entities } from 'consts/entities';
 import { WAvatar } from './Profile.styles';
 
 export default function Profile() {
@@ -22,8 +24,9 @@ export default function Profile() {
 	const [newPassword, setNewPassword] = useState<string>('');
 	const showSuccessSnackbar = useSnackbarOnSuccess('Password was changed');
 	const user = useContext(UserContext).user;
+	const queryClient = useQueryClient();
 
-	const { mutate: changePassword, isLoading } = useMutation(
+	const { mutate: changePassword, isLoading: isChangePasswordLoading } = useMutation(
 		async () => {
 			await provider.changePassword({
 				AccessToken: apiToken?.AccessToken as string,
@@ -36,6 +39,14 @@ export default function Profile() {
 		},
 		{
 			onSuccess: showSuccessSnackbar,
+			onError: useSnackbarOnError(),
+		},
+	);
+
+	const { mutate: switchRole, isLoading: isSwitchRoleLoading } = useMutation(
+		UserService.switchRole,
+		{
+			onSuccess: () => queryClient.invalidateQueries(entities.contextUser),
 			onError: useSnackbarOnError(),
 		},
 	);
@@ -57,7 +68,13 @@ export default function Profile() {
 					<Typography variant={'h6'} mt={2} mb={1}>
 						Role: {user.role}
 					</Typography>
-					<Button variant={'outlined'} size={'large'} fullWidth>
+					<Button
+						variant={'outlined'}
+						size={'large'}
+						disabled={isSwitchRoleLoading}
+						fullWidth
+						onClick={() => switchRole()}
+					>
 						Switch to {user.role === 'Renter' ? 'Landlord' : 'Renter'}
 					</Button>
 
@@ -85,7 +102,7 @@ export default function Profile() {
 								variant={'outlined'}
 								fullWidth
 								size={'small'}
-								disabled={!oldPassword || !newPassword || isLoading}
+								disabled={!oldPassword || !newPassword || isChangePasswordLoading}
 								onClick={() => changePassword()}
 							>
 								Change Password

@@ -40,4 +40,18 @@ export class UserService {
         });
     }
 
+    /**
+     * @returns UserResponse
+     * @throws ApiError
+     */
+    public static switchRole(): CancelablePromise<UserResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/users/role/switch',
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
 }
