@@ -22,6 +22,7 @@ import { CarCharacteristics } from 'components/CarCharacteristics';
 import { CarService, RentalOrderResponse } from 'clients/CoreService';
 import { useSnackbarOnError, useSnackbarOnSuccess } from 'hooks/notistack';
 import { entities } from 'consts/entities';
+import { useRole } from 'context/UserContext';
 import { WSlider, Slide, NextButton, PrevButton, WCalendar } from './SingleCar.styles';
 import { SingleCarProps } from '.';
 
@@ -70,6 +71,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const [rentStartAt, setRentStartAt] = useState<dayjs.Dayjs | null>(null);
 	const [rentEndAt, setRentEndAt] = useState<dayjs.Dayjs | null>(null);
 	const queryClient = useQueryClient();
+	const role = useRole();
 	const showSuccessSnackbar = useSnackbarOnSuccess('Car was rented');
 
 	const { mutate: rentCar, isLoading } = useMutation(
@@ -133,15 +135,17 @@ export default function SingleCar({ car }: SingleCarProps) {
 					<Typography mt={5} mb={5}>
 						{car.description}
 					</Typography>
-					<Button
-						fullWidth
-						variant={isRentMenuOpened ? 'outlined' : 'contained'}
-						size={isRentMenuOpened ? 'small' : 'large'}
-						onClick={() => setIsRentMenuOpened(isOpened => !isOpened)}
-						disabled={isLoading}
-					>
-						{isRentMenuOpened ? 'Hide' : 'Rent A Car'}
-					</Button>
+					{role === 'Renter' && (
+						<Button
+							fullWidth
+							variant={isRentMenuOpened ? 'outlined' : 'contained'}
+							size={isRentMenuOpened ? 'small' : 'large'}
+							onClick={() => setIsRentMenuOpened(isOpened => !isOpened)}
+							disabled={isLoading}
+						>
+							{isRentMenuOpened ? 'Hide' : 'Rent A Car'}
+						</Button>
+					)}
 					{isRentMenuOpened && (
 						<Grid container mt={3} spacing={1}>
 							<Grid item xs={6}>

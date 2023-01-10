@@ -14,6 +14,7 @@ import { entities } from 'consts/entities';
 import { CarOrderBy, CarService, Order } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { CarCard } from 'components/CarCard';
+import { useRole } from 'context/UserContext';
 import { path as addCarPath } from 'pages/cars/add';
 import {
 	WLinearProgress,
@@ -30,6 +31,7 @@ export default function CarsToRent() {
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [orderBy, setOrderBy] = useState<CarOrderBy>('car.price');
 	const [order, setOrder] = useState<Order>('ASC');
+	const role = useRole();
 	const { data: cars, isLoading } = useQuery(
 		[entities.carsToRent, page, rowsPerPage, order, orderBy],
 		() => CarService.getAllCars(page + 1, rowsPerPage, order, orderBy),
@@ -75,15 +77,17 @@ export default function CarsToRent() {
 								{order}
 							</Typography>
 						</OrderButton>
-						<AddButton
-							onClick={async () => {
-								await router.push(addCarPath);
-							}}
-							variant={'contained'}
-						>
-							<AddIcon />
-							<Typography>ADD NEW CAR</Typography>
-						</AddButton>
+						{role === 'Landlord' && (
+							<AddButton
+								onClick={async () => {
+									await router.push(addCarPath);
+								}}
+								variant={'contained'}
+							>
+								<AddIcon />
+								<Typography>ADD NEW CAR</Typography>
+							</AddButton>
+						)}
 					</Header>
 					<ListHolder>
 						{cars.list.map(car => (

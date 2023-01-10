@@ -59,7 +59,7 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 			},
 			{
 				path: singleCarPath,
-				roles: ['Landlord'],
+				roles: ['Renter', 'Landlord'],
 			},
 			{
 				path: profilePath,
