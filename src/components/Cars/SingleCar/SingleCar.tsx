@@ -81,12 +81,11 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const showSuccessSnackbar = useSnackbarOnSuccess('Car was rented');
 
 	const { mutate: rentCar, isLoading } = useMutation(
-		({ orderId, captureId }: { orderId: string; captureId: any }) =>
+		({ orderId }: { orderId: string }) =>
 			CarService.rent(car.id, {
 				startAt: rentStartAt?.toISOString() as string,
 				endAt: rentEndAt?.toISOString() as string,
 				orderId,
-				captureId,
 			}),
 		{
 			onSuccess: () => {
@@ -214,9 +213,8 @@ export default function SingleCar({ car }: SingleCarProps) {
 									onApprove={async (data, actions) => {
 										const order = await actions.order?.capture();
 										if (order) {
-											const captureId = order.purchase_units[0]?.payments?.captures?.[0]?.id;
 											const orderId = order.id;
-											rentCar({ orderId, captureId });
+											rentCar({ orderId: order.id });
 										}
 									}}
 								/>
