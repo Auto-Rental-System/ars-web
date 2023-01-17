@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 import { CustomArrowProps } from 'react-slick';
@@ -13,6 +13,8 @@ import ArrowBack from '@mui/icons-material/ArrowBackIosNew';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
+import { PayPalButtons } from '@paypal/react-paypal-js';
+import { CreateOrderActions, CreateOrderData } from '@paypal/paypal-js';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -70,20 +72,50 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const [isRentMenuOpened, setIsRentMenuOpened] = useState<boolean>(false);
 	const [rentStartAt, setRentStartAt] = useState<dayjs.Dayjs | null>(null);
 	const [rentEndAt, setRentEndAt] = useState<dayjs.Dayjs | null>(null);
+	const totalPrice = useMemo(
+		() => (rentStartAt && rentEndAt ? (rentEndAt.diff(rentStartAt, 'days') + 1) * car.price : 0),
+		[rentStartAt, rentEndAt],
+	);
 	const queryClient = useQueryClient();
 	const role = useRole();
 	const showSuccessSnackbar = useSnackbarOnSuccess('Car was rented');
 
 	const { mutate: rentCar, isLoading } = useMutation(
-		({ startAt, endAt }: { startAt: dayjs.Dayjs; endAt: dayjs.Dayjs }) =>
-			CarService.rent(car.id, { startAt: startAt.toISOString(), endAt: endAt.toISOString() }),
+		({ orderId }: { orderId: string }) =>
+			CarService.rent(car.id, {
+				startAt: rentStartAt?.toISOString() as string,
+				endAt: rentEndAt?.toISOString() as string,
+				orderId,
+			}),
 		{
 			onSuccess: () => {
 				showSuccessSnackbar();
+				setRentStartAt(null);
+				setRentEndAt(null);
 				return queryClient.invalidateQueries([entities.singleCar]);
 			},
 			onError: useSnackbarOnError(),
 		},
+	);
+
+	const createOrder = useCallback(
+		async (data: CreateOrderData, actions: CreateOrderActions) => {
+			return actions.order.create({
+				purchase_units: [
+					{
+						amount: {
+							value: totalPrice.toString(),
+							currency_code: 'USD',
+						},
+					},
+				],
+				application_context: {
+					brand_name: 'Auto Rental System',
+					shipping_preference: 'NO_SHIPPING',
+				},
+			});
+		},
+		[totalPrice],
 	);
 
 	const renderDatePickerDay = (
@@ -155,6 +187,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 									onChange={date => setRentStartAt(dayjs(date))}
 									renderInput={params => <TextField fullWidth {...params} />}
 									renderDay={renderDatePickerDay}
+									disabled={isLoading}
 								/>
 							</Grid>
 							<Grid item xs={6}>
@@ -164,23 +197,27 @@ export default function SingleCar({ car }: SingleCarProps) {
 									onChange={date => setRentEndAt(dayjs(date))}
 									renderInput={params => <TextField fullWidth {...params} />}
 									renderDay={renderDatePickerDay}
+									disabled={isLoading}
 								/>
 							</Grid>
-							<Grid item xs={12}>
-								<Button
-									fullWidth
-									variant={'contained'}
-									size={'large'}
+							<Grid item xs={12} container justifyContent={'flex-end'}>
+								<Typography variant={'h5'} color={'primary'}>
+									Total: {totalPrice}$
+								</Typography>
+							</Grid>
+							<Grid item xs={12} mt={2}>
+								<PayPalButtons
 									disabled={!rentStartAt || !rentEndAt || isLoading}
-									onClick={() =>
-										rentCar({
-											startAt: rentStartAt as dayjs.Dayjs,
-											endAt: rentEndAt as dayjs.Dayjs,
-										})
-									}
-								>
-									RENT
-								</Button>
+									createOrder={createOrder}
+									forceReRender={[createOrder]}
+									onApprove={async (data, actions) => {
+										const order = await actions.order?.capture();
+										if (order) {
+											const orderId = order.id;
+											rentCar({ orderId: order.id });
+										}
+									}}
+								/>
 							</Grid>
 						</Grid>
 					)}

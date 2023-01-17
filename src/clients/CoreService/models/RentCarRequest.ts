@@ -5,5 +5,6 @@
 export type RentCarRequest = {
     startAt: string;
     endAt: string;
+    orderId: string;
 };
 
