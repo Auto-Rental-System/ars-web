@@ -28,5 +28,6 @@ export type { UserResponse } from './models/UserResponse';
 export type { UserRole } from './models/UserRole';
 
 export { CarService } from './services/CarService';
+export { DefaultService } from './services/DefaultService';
 export { SystemService } from './services/SystemService';
 export { UserService } from './services/UserService';

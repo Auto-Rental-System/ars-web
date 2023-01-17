@@ -144,7 +144,7 @@ export class CarService {
     ): CancelablePromise<DetailedCarResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/cars/{id}/rent',
+            url: '/cars/{id}/order',
             path: {
                 'id': id,
             },
