@@ -1,8 +1,8 @@
-import { CarListItemResponse } from 'clients/CoreService';
 import { ButtonBaseProps } from '@mui/material/ButtonBase';
+import { CarWithTitleImageResponse } from 'clients/CoreService';
 
 export { default as CarCard } from './CarCard';
 
 export type CarCardProps = {
-	car: CarListItemResponse;
+	car: CarWithTitleImageResponse;
 } & ButtonBaseProps;

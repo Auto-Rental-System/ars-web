@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CarListItemResponse } from './CarListItemResponse';
+import type { CarWithTitleImageResponse } from './CarWithTitleImageResponse';
 
 export type CarListResponse = {
-    list: Array<CarListItemResponse>;
+    list: Array<CarWithTitleImageResponse>;
     page: number;
     rowsPerPage: number;
     total: number;

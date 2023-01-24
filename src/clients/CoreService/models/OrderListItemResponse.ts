@@ -2,12 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CarResponse } from './CarResponse';
+import type { CarWithTitleImageResponse } from './CarWithTitleImageResponse';
 import type { PaymentResponse } from './PaymentResponse';
 import type { RentalOrderResponse } from './RentalOrderResponse';
 
 export type OrderListItemResponse = {
-    car: CarResponse;
+    car: CarWithTitleImageResponse;
     order: RentalOrderResponse;
     payment: PaymentResponse;
 };

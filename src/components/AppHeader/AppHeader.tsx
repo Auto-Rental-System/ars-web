@@ -204,7 +204,7 @@ export default function AppHeader({
 							{pages.map(page => {
 								const Component = page.Component;
 								return Component ? (
-									<Component />
+									<Component key={page.name} />
 								) : (
 									<PageButton key={page.name} onClick={page.onClick}>
 										{page.name}

@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CarImageResponse } from './CarImageResponse';
 import type { Fuel } from './Fuel';
 import type { Gearbox } from './Gearbox';
 
@@ -16,6 +17,7 @@ export type OwnCarListItemResponse = {
     fuelConsumption: number;
     pledge: number;
     price: number;
+    titleImage?: CarImageResponse;
     netValue: number;
 };
 
