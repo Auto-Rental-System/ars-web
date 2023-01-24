@@ -10,9 +10,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import { entities } from 'consts/entities';
+import { useRole } from 'context/UserContext';
 import { UserService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { useLogout } from 'hooks/auth';
@@ -83,6 +85,47 @@ function AvatarPopover({ name }: { name: string }) {
 	);
 }
 
+function ReportPopover() {
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const router = useRouter();
+	const role = useRole();
+
+	const items: Array<{ name: string; onClick: () => any; hidden?: boolean }> = [
+		{
+			name: 'My Cars',
+			onClick: () => console.log('my cars'),
+			hidden: role !== 'Landlord',
+		},
+		{
+			name: 'Rental orders',
+			onClick: () => console.log('rental orders'),
+		},
+	];
+
+	const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleCloseMenu = () => {
+		setAnchorEl(null);
+	};
+
+	return (
+		<>
+			<PageButton onClick={handleOpenMenu}>Reports</PageButton>
+			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+				{items
+					.filter(item => !item.hidden)
+					.map(item => (
+						<MenuItem key={item.name} onClick={item.onClick}>
+							<Typography textAlign='center'>{item.name}</Typography>
+						</MenuItem>
+					))}
+			</Menu>
+		</>
+	);
+}
+
 function Logo() {
 	return (
 		<Link href={'/'}>
@@ -103,8 +146,13 @@ export default function AppHeader({
 }) {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const router = useRouter();
+	const role = useRole();
 
-	const pages: Array<{ name: string; href: string }> = [{ name: 'Cars', href: carsPath }];
+	const pages: Array<{ name: string; onClick: () => any; hidden?: boolean; Component?: React.FC }> =
+		[
+			{ name: 'Cars', onClick: () => router.push(carsPath) },
+			{ name: 'Reports', hidden: !role, onClick: () => {}, Component: ReportPopover },
+		];
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -138,7 +186,7 @@ export default function AppHeader({
 									onClose={handleCloseNavMenu}
 								>
 									{pages.map(page => (
-										<MenuItem key={page.name} onClick={() => router.push(page.href)}>
+										<MenuItem key={page.name} onClick={page.onClick}>
 											<Typography textAlign='center'>{page.name}</Typography>
 										</MenuItem>
 									))}
@@ -152,11 +200,16 @@ export default function AppHeader({
 
 					{!hideNavigation && (
 						<PagesWrapper>
-							{pages.map(page => (
-								<PageButton key={page.name} onClick={() => router.push(page.href)}>
-									{page.name}
-								</PageButton>
-							))}
+							{pages.map(page => {
+								const Component = page.Component;
+								return Component ? (
+									<Component />
+								) : (
+									<PageButton key={page.name} onClick={page.onClick}>
+										{page.name}
+									</PageButton>
+								);
+							})}
 						</PagesWrapper>
 					)}
 
