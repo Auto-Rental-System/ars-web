@@ -35,6 +35,7 @@ import {
 
 import { path as carsPath } from 'pages/cars/index';
 import { path as profilePath } from 'pages/profile';
+import { path as rentalOrdersPath } from 'pages/reports/rental-orders';
 
 function AvatarPopover({ name }: { name: string }) {
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -98,7 +99,7 @@ function ReportPopover() {
 		},
 		{
 			name: 'Rental orders',
-			onClick: () => console.log('rental orders'),
+			onClick: () => router.push(rentalOrdersPath),
 		},
 	];
 
