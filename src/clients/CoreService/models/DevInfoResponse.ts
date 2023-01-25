@@ -3,14 +3,14 @@
 /* eslint-disable */
 
 import type { CarOrderBy } from './CarOrderBy';
+import type { MyCarListOrderBy } from './MyCarListOrderBy';
 import type { Order } from './Order';
 import type { OrderListOrderBy } from './OrderListOrderBy';
-import type { OwnCarListOrderBy } from './OwnCarListOrderBy';
 
 export type DevInfoResponse = {
     carOrderBy: CarOrderBy;
     orderListOrderBy: OrderListOrderBy;
-    OwnCarListOrderBy: OwnCarListOrderBy;
+    myCarListOrderBy: MyCarListOrderBy;
     order: Order;
 };
 

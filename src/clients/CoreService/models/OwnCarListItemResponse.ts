@@ -19,5 +19,6 @@ export type OwnCarListItemResponse = {
     price: number;
     titleImage?: CarImageResponse;
     netValue: number;
+    totalDaysRented: number;
 };
 

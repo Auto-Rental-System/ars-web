@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { MyCarListResponse } from '../models/MyCarListResponse';
 import type { OrderListResponse } from '../models/OrderListResponse';
-import type { OwnCarListResponse } from '../models/OwnCarListResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -16,7 +16,7 @@ export class ReportService {
      * @param order
      * @param orderBy
      * @param filters
-     * @returns OwnCarListResponse
+     * @returns MyCarListResponse
      * @throws ApiError
      */
     public static getMyCarsReport(
@@ -25,7 +25,7 @@ export class ReportService {
         order?: 'ASC' | 'DESC',
         orderBy?: 'car.id',
         filters?: Array<string>,
-    ): CancelablePromise<OwnCarListResponse> {
+    ): CancelablePromise<MyCarListResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/reports/cars/own',

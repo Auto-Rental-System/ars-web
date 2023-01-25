@@ -2,4 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type OwnCarListOrderBy = 'car.id';
+export type MyCarListOrderBy = 'car.id';

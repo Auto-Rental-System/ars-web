@@ -1,32 +1,32 @@
-import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import TablePagination from '@mui/material/TablePagination';
-import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
+import TablePagination from '@mui/material/TablePagination';
 
-import { AppHeader } from 'components/AppHeader';
-import { Order, OrderListOrderBy, ReportService } from 'clients/CoreService';
-import { useSnackbarOnError } from 'hooks/notistack';
+import { MyCarListOrderBy, Order, ReportService } from 'clients/CoreService';
 import { entities } from 'consts/entities';
+import { useSnackbarOnError } from 'hooks/notistack';
+import { AppHeader } from 'components/AppHeader';
 import { ListHeader } from 'components/ListHeader';
-import { RentalOrderCard } from 'components/RentalOrderCard';
 import { ListHolder } from 'components/Cars/CarsToRent/CarsToRent.styles';
+import { CarCard } from 'components/CarCard';
 
-export const path = '/reports/rental-orders';
+export const path = '/reports/my-cars';
 
-export default function RentalOrdersPage() {
+export default function MyCarsPage() {
 	const router = useRouter();
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [orderBy, setOrderBy] = useState<string>('order.id');
+	const [orderBy, setOrderBy] = useState<string>('car.id');
 	const [order, setOrder] = useState<Order>('ASC');
 	const { data: orders, isLoading } = useQuery(
-		[entities.orders, page, rowsPerPage, order, orderBy],
-		() => ReportService.getMyOrders(page + 1, rowsPerPage, order, orderBy as OrderListOrderBy),
+		[entities.myCarsReport, page, rowsPerPage, order, orderBy],
+		() => ReportService.getMyCarsReport(page + 1, rowsPerPage, order, orderBy as MyCarListOrderBy),
 		{
 			refetchOnWindowFocus: false,
 			keepPreviousData: true,
@@ -37,7 +37,7 @@ export default function RentalOrdersPage() {
 	return (
 		<>
 			<Head>
-				<title>My Rental Orders | ARS</title>
+				<title>My Cars | ARS</title>
 				<meta name='description' content='NextJS Web Boilerplate' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
@@ -46,36 +46,31 @@ export default function RentalOrdersPage() {
 				<AppHeader />
 				<Container>
 					<Typography variant={'h4'} mt={5} mb={2}>
-						My Rental Orders Report
+						My Cars Report
 					</Typography>
 					{!orders?.list.length ? (
-						<Alert severity={'info'}>There are no rental orders</Alert>
+						<Alert severity={'info'}>You have no cars</Alert>
 					) : (
 						<>
 							<ListHeader
 								orderBy={orderBy}
 								setOrderBy={setOrderBy}
-								orderByOptions={['order.id']}
+								orderByOptions={['car.id']}
 								getOrderByLabel={option =>
 									((
 										{
-											'order.id': 'Order ID',
-										} as Record<OrderListOrderBy, string>
-									)[option as OrderListOrderBy])
+											'car.id': 'Car ID',
+										} as Record<MyCarListOrderBy, string>
+									)[option as MyCarListOrderBy])
 								}
 								order={order}
 								setOrder={setOrder}
 								orderDisabled={isLoading}
 							/>
 							<ListHolder>
-								{orders.list.map(({ car, payment, order }) => (
+								{orders.list.map(car => (
 									<Grid item key={car.id}>
-										<RentalOrderCard
-											car={car}
-											payment={payment}
-											rentalOrder={order}
-											onClick={() => router.push(`/cars/${car.id}`)}
-										/>
+										<CarCard car={car} showReport />
 									</Grid>
 								))}
 							</ListHolder>

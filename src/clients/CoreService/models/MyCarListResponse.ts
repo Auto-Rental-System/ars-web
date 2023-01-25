@@ -4,7 +4,7 @@
 
 import type { OwnCarListItemResponse } from './OwnCarListItemResponse';
 
-export type OwnCarListResponse = {
+export type MyCarListResponse = {
     list: Array<OwnCarListItemResponse>;
     page: number;
     rowsPerPage: number;

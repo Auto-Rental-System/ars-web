@@ -67,7 +67,7 @@ export default function CarsToRent() {
 					/>
 					<ListHolder>
 						{cars.list.map(car => (
-							<Grid item>
+							<Grid item key={car.id}>
 								<CarCard car={car} onClick={() => router.push(`/cars/${car.id}`)} />
 							</Grid>
 						))}
