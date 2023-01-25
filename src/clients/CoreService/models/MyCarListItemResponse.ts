@@ -6,7 +6,7 @@ import type { CarImageResponse } from './CarImageResponse';
 import type { Fuel } from './Fuel';
 import type { Gearbox } from './Gearbox';
 
-export type OwnCarListItemResponse = {
+export type MyCarListItemResponse = {
     id: number;
     brand: string;
     model: string;
