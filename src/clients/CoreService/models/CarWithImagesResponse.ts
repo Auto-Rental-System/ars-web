@@ -5,9 +5,8 @@
 import type { CarImageResponse } from './CarImageResponse';
 import type { Fuel } from './Fuel';
 import type { Gearbox } from './Gearbox';
-import type { RentalOrderResponse } from './RentalOrderResponse';
 
-export type DetailedCarResponse = {
+export type CarWithImagesResponse = {
     id: number;
     brand: string;
     model: string;
@@ -18,7 +17,6 @@ export type DetailedCarResponse = {
     fuelConsumption: number;
     pledge: number;
     price: number;
-    rentalOrders: Array<RentalOrderResponse>;
     images: Array<CarImageResponse>;
 };
 

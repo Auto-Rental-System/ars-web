@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 import { CustomArrowProps } from 'react-slick';
-import { useMutation, useQueryClient } from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import classNames from 'classnames';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -21,10 +21,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-calendar/dist/Calendar.css';
 
 import { CarCharacteristics } from 'components/CarCharacteristics';
-import { CarService, RentalOrderResponse } from 'clients/CoreService';
+import {CarService, RentalOrderResponse, UserResponse} from 'clients/CoreService';
 import { useSnackbarOnError, useSnackbarOnSuccess } from 'hooks/notistack';
 import { entities } from 'consts/entities';
-import { useRole } from 'context/UserContext';
+import { useRole, useUser } from 'context/UserContext';
 import { WSlider, Slide, NextButton, PrevButton, WCalendar } from './SingleCar.styles';
 import { SingleCarProps } from '.';
 
@@ -56,7 +56,7 @@ function getActiveRentalOrder(
 	);
 }
 
-function getCalendarDateClassnames(date: Date, rentalOrders: Array<RentalOrderResponse>): string {
+function getCalendarDateClassnames(date: Date, rentalOrders: Array<RentalOrderResponse>, user?: UserResponse): string {
 	const wDate = dayjs(date);
 	const activeRentalOrder = getActiveRentalOrder(wDate, rentalOrders);
 
@@ -64,7 +64,7 @@ function getCalendarDateClassnames(date: Date, rentalOrders: Array<RentalOrderRe
 		active: !!activeRentalOrder,
 		'first-day': activeRentalOrder && wDate.isSame(activeRentalOrder.startAt, 'day'),
 		'last-day': activeRentalOrder && wDate.isSame(activeRentalOrder.endAt, 'day'),
-		'rented-by-me': !!activeRentalOrder?.orderedByMe,
+		'rented-by-me': activeRentalOrder?.userId === user?.id,
 	});
 }
 
@@ -72,15 +72,29 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const [isRentMenuOpened, setIsRentMenuOpened] = useState<boolean>(false);
 	const [rentStartAt, setRentStartAt] = useState<dayjs.Dayjs | null>(null);
 	const [rentEndAt, setRentEndAt] = useState<dayjs.Dayjs | null>(null);
+	const [activeStartDate, setActiveStartDate] = useState<dayjs.Dayjs>(dayjs().startOf("month"));
 	const totalPrice = useMemo(
 		() => (rentStartAt && rentEndAt ? (rentEndAt.diff(rentStartAt, 'days') + 1) * car.price : 0),
 		[rentStartAt, rentEndAt],
 	);
 	const queryClient = useQueryClient();
 	const role = useRole();
+	const user = useUser();
 	const showSuccessSnackbar = useSnackbarOnSuccess('Car was rented');
 
-	const { mutate: rentCar, isLoading } = useMutation(
+	const { data: rentalOrders, isLoading: rentalOrdersLoading } = useQuery(
+		[entities.rentalOrders, car.id],
+		() => {
+			const to = activeStartDate.endOf('month')
+			return CarService.getRentalOrders(car.id, activeStartDate.toISOString(), to.toISOString());
+		},
+		{
+			refetchOnWindowFocus: false,
+			onError: useSnackbarOnError(),
+		},
+	);
+
+	const { mutate: rentCar, isLoading: rentCarLoading } = useMutation(
 		({ orderId }: { orderId: string }) =>
 			CarService.rent(car.id, {
 				startAt: rentStartAt?.toISOString() as string,
@@ -118,12 +132,14 @@ export default function SingleCar({ car }: SingleCarProps) {
 		[totalPrice],
 	);
 
+	const isLoading = rentalOrdersLoading || rentCarLoading;
+
 	const renderDatePickerDay = (
 		date: dayjs.Dayjs,
 		selectedDates: Array<dayjs.Dayjs>,
 		pickersDayProps: PickersDayProps<dayjs.Dayjs>,
 	) => {
-		const activeRentalOrder = getActiveRentalOrder(date, car.rentalOrders);
+		const activeRentalOrder = getActiveRentalOrder(date, rentalOrders?.rentalOrders || []);
 
 		return (
 			<PickersDay {...pickersDayProps} disabled={!!activeRentalOrder || date.isBefore(dayjs())} />
@@ -139,7 +155,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 				<Grid item xs={5}>
 					<WSlider nextArrow={<ArrowNext />} prevArrow={<ArrowPrev />}>
 						{car.images.map(image => (
-							<Slide>
+							<Slide key={image.url}>
 								<Image src={image.url} alt={image.filename} fill priority objectFit={'cover'} />
 							</Slide>
 						))}
@@ -148,9 +164,11 @@ export default function SingleCar({ car }: SingleCarProps) {
 						Busy Dates
 					</Typography>
 					<WCalendar
-						onChange={() => {}}
+						onChange={(...params: any) => console.log('onChange', params)}
 						value={new Date()}
-						tileClassName={({ date }) => getCalendarDateClassnames(date, car.rentalOrders)}
+						tileClassName={({ date }) => getCalendarDateClassnames(date, rentalOrders?.rentalOrders || [], user)}
+						activeStartDate={activeStartDate.toDate()}
+						onActiveStartDateChange={(view) => setActiveStartDate(dayjs(view.activeStartDate))}
 					/>
 				</Grid>
 				<Grid item xs={7}>

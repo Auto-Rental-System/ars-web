@@ -1,1 +1,1 @@
-export { UserContext, UserContextProvider, useRole } from './UserContext';
+export { UserContext, UserContextProvider, useRole, useUser } from './UserContext';
