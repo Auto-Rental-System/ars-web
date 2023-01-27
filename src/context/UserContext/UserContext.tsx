@@ -12,6 +12,8 @@ export const UserContext = createContext<{ user?: UserResponse; isLoaded: boolea
 
 export const useRole = () => useContext(UserContext).user?.role;
 
+export const useUser = () => useContext(UserContext).user;
+
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
 	const [apiToken] = useApiToken();
 	const [isLoaded, setIsLoaded] = useState(!apiToken);

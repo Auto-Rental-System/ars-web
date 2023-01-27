@@ -3,9 +3,10 @@
 /* eslint-disable */
 import type { CarImagesSignedPostUrlResponse } from '../models/CarImagesSignedPostUrlResponse';
 import type { CarListResponse } from '../models/CarListResponse';
+import type { CarRentalOrdersResponse } from '../models/CarRentalOrdersResponse';
 import type { CarResponse } from '../models/CarResponse';
+import type { CarWithImagesResponse } from '../models/CarWithImagesResponse';
 import type { CreateCarRequest } from '../models/CreateCarRequest';
-import type { DetailedCarResponse } from '../models/DetailedCarResponse';
 import type { RentCarRequest } from '../models/RentCarRequest';
 import type { UpdateCarRequest } from '../models/UpdateCarRequest';
 
@@ -90,12 +91,12 @@ export class CarService {
 
     /**
      * @param id
-     * @returns DetailedCarResponse
+     * @returns CarWithImagesResponse
      * @throws ApiError
      */
     public static getById(
         id: number,
-    ): CancelablePromise<DetailedCarResponse> {
+    ): CancelablePromise<CarWithImagesResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/cars/{id}',
@@ -111,13 +112,13 @@ export class CarService {
     /**
      * @param id
      * @param requestBody
-     * @returns DetailedCarResponse
+     * @returns CarWithImagesResponse
      * @throws ApiError
      */
     public static update(
         id: number,
         requestBody: UpdateCarRequest,
-    ): CancelablePromise<DetailedCarResponse> {
+    ): CancelablePromise<CarWithImagesResponse> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/cars/{id}',
@@ -135,13 +136,13 @@ export class CarService {
     /**
      * @param id
      * @param requestBody
-     * @returns DetailedCarResponse
+     * @returns CarWithImagesResponse
      * @throws ApiError
      */
     public static rent(
         id: number,
         requestBody: RentCarRequest,
-    ): CancelablePromise<DetailedCarResponse> {
+    ): CancelablePromise<CarWithImagesResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/cars/{id}/order',
@@ -150,6 +151,34 @@ export class CarService {
             },
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param id
+     * @param from
+     * @param to
+     * @returns CarRentalOrdersResponse
+     * @throws ApiError
+     */
+    public static getRentalOrders(
+        id: number,
+        from: string,
+        to: string,
+    ): CancelablePromise<CarRentalOrdersResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/cars/{id}/rental-orders',
+            path: {
+                'id': id,
+            },
+            query: {
+                'from': from,
+                'to': to,
+            },
             errors: {
                 401: `Unauthorized`,
             },

@@ -76,6 +76,10 @@ export const WCalendar = styled(Calendar).attrs({
 			border-radius: 0;
 		}
 
+    button.react-calendar__tile--now {
+      background: ${({ theme }) => theme.palette.primary.main};
+    }
+
 		button.active {
 			background: ${({ theme }) => theme.colors.lightSecondary};
 			color: ${({ theme }) => theme.palette.primary.main};

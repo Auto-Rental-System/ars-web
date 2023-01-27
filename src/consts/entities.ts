@@ -6,4 +6,5 @@ export const entities = {
 	orders: 'ORDERS',
 	myCarsReport: 'MY_CARS_REPORT',
 	singleCar: 'SINGLE_CAR',
+	rentalOrders: 'RENTAL_ORDERS',
 };

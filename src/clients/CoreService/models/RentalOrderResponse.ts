@@ -7,5 +7,6 @@ export type RentalOrderResponse = {
     startAt: string;
     endAt: string;
     carId: number;
+    userId: number;
 };
 

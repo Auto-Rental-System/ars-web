@@ -1,7 +1,7 @@
-import { DetailedCarResponse } from 'clients/CoreService';
+import { CarWithImagesResponse } from 'clients/CoreService';
 
 export { default as SingleCar } from './SingleCar';
 
 export type SingleCarProps = {
-	car: DetailedCarResponse;
+	car: CarWithImagesResponse;
 };
