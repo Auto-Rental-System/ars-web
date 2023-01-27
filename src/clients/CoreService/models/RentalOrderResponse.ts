@@ -3,8 +3,9 @@
 /* eslint-disable */
 
 export type RentalOrderResponse = {
+    id: number;
     startAt: string;
     endAt: string;
-    orderedByMe: boolean;
+    carId: number;
 };
 

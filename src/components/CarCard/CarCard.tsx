@@ -7,7 +7,7 @@ import { CarCharacteristics } from 'components/CarCharacteristics';
 import { Container, CarInfo, CarImageWrapper, CarDescription } from './CarCard.styles';
 import { CarCardProps } from '.';
 
-export default function CarCard({ car, ...rest }: CarCardProps) {
+export default function CarCard({ car, showReport, ...rest }: CarCardProps) {
 	return (
 		<Container {...rest}>
 			<CarImageWrapper>
@@ -22,8 +22,13 @@ export default function CarCard({ car, ...rest }: CarCardProps) {
 					{car.brand} {car.model}
 				</Typography>
 				<Typography color={'primary'} variant={'h5'}>
-					$ {car.price}
+					$ {showReport && car.netValue ? car.netValue : car.price}
 				</Typography>
+				{showReport && car.totalDaysRented && (
+					<Typography color={'textSecondary'} variant={'body2'} mb={2}>
+						{car.totalDaysRented} DAYS
+					</Typography>
+				)}
 				<CarCharacteristics {...car} />
 				<CarDescription>{car.description}</CarDescription>
 			</CarInfo>

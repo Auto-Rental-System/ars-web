@@ -23,6 +23,8 @@ import { path as carsListPath } from 'pages/cars/index';
 import { path as addCarPath } from 'pages/cars/add';
 import { path as singleCarPath } from 'pages/cars/[id]';
 import { path as profilePath } from 'pages/profile';
+import { path as rentalOrdersPath } from 'pages/reports/rental-orders';
+import { path as myCarsPath } from 'pages/reports/my-cars';
 
 const queryClient = new QueryClient();
 
@@ -64,6 +66,14 @@ function Routing({ Component, pageProps }: Pick<AppProps, 'Component' | 'pagePro
 			{
 				path: profilePath,
 				roles: ['Renter', 'Landlord'],
+			},
+			{
+				path: rentalOrdersPath,
+				roles: ['Renter', 'Landlord'],
+			},
+			{
+				path: myCarsPath,
+				roles: ['Landlord'],
 			},
 		],
 		[],
