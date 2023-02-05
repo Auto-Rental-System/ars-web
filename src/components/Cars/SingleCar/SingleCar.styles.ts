@@ -9,6 +9,10 @@ export const Slide = styled.div`
 	position: relative;
 	aspect-ratio: 16 / 9;
 	border-radius: 0.5rem;
+	
+	.img {
+		object-fit: cover;
+	}
 `;
 
 export const WSlider = styled(Slider).attrs({
@@ -76,9 +80,9 @@ export const WCalendar = styled(Calendar).attrs({
 			border-radius: 0;
 		}
 
-    button.react-calendar__tile--now {
-      background: ${({ theme }) => theme.palette.primary.main};
-    }
+		button.react-calendar__tile--now {
+			background: ${({ theme }) => theme.palette.primary.main};
+		}
 
 		button.active {
 			background: ${({ theme }) => theme.colors.lightSecondary};

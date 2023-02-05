@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { UserResponse, UserService } from 'clients/CoreService';
 import { useApiToken } from 'hooks/auth';

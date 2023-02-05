@@ -23,7 +23,7 @@ export default function RentalOrderCard({
 		<Container {...rest}>
 			<CarImageWrapper>
 				{car.titleImage ? (
-					<Image src={car.titleImage.url} fill priority objectFit={'cover'} alt={car.brand} />
+					<Image src={car.titleImage.url} className={'title-image'} fill priority alt={car.brand} />
 				) : (
 					<Image src={CameraIcon} alt={'Camera'} className={'image-mockup'} />
 				)}

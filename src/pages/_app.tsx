@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { useState } from 'react';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -19,30 +20,34 @@ const queryClient = new QueryClient();
 CoreOpenAPi.BASE = process.env.NEXT_PUBLIC_CORE_URL as string;
 
 export default function App({ Component, pageProps }: AppProps) {
+	const [queryClient] = useState(() => new QueryClient());
+
 	useAutoTokenRefresh();
 
 	return (
-		<QueryClientProvider client={queryClient} contextSharing>
-			<StyledThemeProvider theme={theme}>
-				<MuiStylesProvider injectFirst>
-					<StyledEngineProvider injectFirst>
-						<MuiThemeProvider theme={theme}>
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<PayPalScriptProvider
-									options={{ 'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '' }}
-								>
-									<SnackbarProvider>
-										<UserContextProvider>
-											<GlobalStyle />
-											<Routing Component={Component} pageProps={pageProps} />
-										</UserContextProvider>
-									</SnackbarProvider>
-								</PayPalScriptProvider>
-							</LocalizationProvider>
-						</MuiThemeProvider>
-					</StyledEngineProvider>
-				</MuiStylesProvider>
-			</StyledThemeProvider>
+		<QueryClientProvider client={queryClient}>
+			<Hydrate state={pageProps.dehydratedState}>
+				<StyledThemeProvider theme={theme}>
+					<MuiStylesProvider injectFirst>
+						<StyledEngineProvider injectFirst>
+							<MuiThemeProvider theme={theme}>
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<PayPalScriptProvider
+										options={{ 'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '' }}
+									>
+										<SnackbarProvider>
+											<UserContextProvider>
+												<GlobalStyle />
+												<Routing Component={Component} pageProps={pageProps} />
+											</UserContextProvider>
+										</SnackbarProvider>
+									</PayPalScriptProvider>
+								</LocalizationProvider>
+							</MuiThemeProvider>
+						</StyledEngineProvider>
+					</MuiStylesProvider>
+				</StyledThemeProvider>
+			</Hydrate>
 		</QueryClientProvider>
 	);
 }

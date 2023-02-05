@@ -12,7 +12,7 @@ export default function CarCard({ car, showReport, ...rest }: CarCardProps) {
 		<Container {...rest}>
 			<CarImageWrapper>
 				{car.titleImage ? (
-					<Image src={car.titleImage.url} fill priority objectFit={'cover'} alt={car.brand} />
+					<Image src={car.titleImage.url} fill className={'title-image'} alt={car.brand} />
 				) : (
 					<Image src={Camera} alt={'Camera'} className={'image-mockup'} />
 				)}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -163,7 +163,7 @@ export default function AppHeader({
 		setAnchorElNav(null);
 	};
 
-	const { data: me } = useQuery(entities.me, UserService.getCurrent, {
+	const { data: me } = useQuery([entities.me], UserService.getCurrent, {
 		onError: useSnackbarOnError(),
 		enabled: !hideUser,
 	});

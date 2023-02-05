@@ -1,7 +1,8 @@
 import Head from 'next/head';
+import {GetServerSideProps} from "next";
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import {dehydrate, QueryClient, useQuery} from '@tanstack/react-query';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
@@ -9,14 +10,27 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 
 import { AppHeader } from 'components/AppHeader';
-import { Order, OrderListOrderBy, ReportService } from 'clients/CoreService';
+import {CarService, Order, OrderListOrderBy, ReportService} from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { entities } from 'consts/entities';
 import { ListHeader } from 'components/ListHeader';
 import { RentalOrderCard } from 'components/RentalOrderCard';
-import { ListHolder } from 'components/Cars/CarsToRent/CarsToRent.styles';
 
 export const path = '/reports/rental-orders';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const queryClient = new QueryClient();
+
+	await queryClient.prefetchQuery([entities.orders, 0, 10, 'ASC', 'order.id'], () =>
+		ReportService.getMyOrders(1, 10),
+	);
+
+	return {
+		props: {
+			dehydratedState: dehydrate(queryClient),
+		},
+	};
+};
 
 export default function RentalOrdersPage() {
 	const router = useRouter();
@@ -67,7 +81,7 @@ export default function RentalOrdersPage() {
 								setOrder={setOrder}
 								orderDisabled={isLoading}
 							/>
-							<ListHolder>
+							<Grid container direction={'column'} spacing={1}>
 								{orders.list.map(({ car, payment, order }) => (
 									<Grid item key={car.id}>
 										<RentalOrderCard
@@ -78,7 +92,7 @@ export default function RentalOrdersPage() {
 										/>
 									</Grid>
 								))}
-							</ListHolder>
+							</Grid>
 							<TablePagination
 								component={'div'}
 								count={orders.total}

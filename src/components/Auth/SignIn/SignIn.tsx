@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState, ChangeEvent } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';

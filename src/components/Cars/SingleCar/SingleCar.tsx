@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 import { CustomArrowProps } from 'react-slick';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -21,7 +21,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-calendar/dist/Calendar.css';
 
 import { CarCharacteristics } from 'components/CarCharacteristics';
-import {CarService, RentalOrderResponse, UserResponse} from 'clients/CoreService';
+import { CarService, RentalOrderResponse, UserResponse } from 'clients/CoreService';
 import { useSnackbarOnError, useSnackbarOnSuccess } from 'hooks/notistack';
 import { entities } from 'consts/entities';
 import { useRole, useUser } from 'context/UserContext';
@@ -56,7 +56,11 @@ function getActiveRentalOrder(
 	);
 }
 
-function getCalendarDateClassnames(date: Date, rentalOrders: Array<RentalOrderResponse>, user?: UserResponse): string {
+function getCalendarDateClassnames(
+	date: Date,
+	rentalOrders: Array<RentalOrderResponse>,
+	user?: UserResponse,
+): string {
 	const wDate = dayjs(date);
 	const activeRentalOrder = getActiveRentalOrder(wDate, rentalOrders);
 
@@ -72,7 +76,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const [isRentMenuOpened, setIsRentMenuOpened] = useState<boolean>(false);
 	const [rentStartAt, setRentStartAt] = useState<dayjs.Dayjs | null>(null);
 	const [rentEndAt, setRentEndAt] = useState<dayjs.Dayjs | null>(null);
-	const [activeStartDate, setActiveStartDate] = useState<dayjs.Dayjs>(dayjs().startOf("month"));
+	const [activeStartDate, setActiveStartDate] = useState<dayjs.Dayjs>(dayjs().startOf('month'));
 	const totalPrice = useMemo(
 		() => (rentStartAt && rentEndAt ? (rentEndAt.diff(rentStartAt, 'days') + 1) * car.price : 0),
 		[rentStartAt, rentEndAt],
@@ -85,7 +89,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 	const { data: rentalOrders, isLoading: rentalOrdersLoading } = useQuery(
 		[entities.rentalOrders, car.id],
 		() => {
-			const to = activeStartDate.endOf('month')
+			const to = activeStartDate.endOf('month');
 			return CarService.getRentalOrders(car.id, activeStartDate.toISOString(), to.toISOString());
 		},
 		{
@@ -156,7 +160,7 @@ export default function SingleCar({ car }: SingleCarProps) {
 					<WSlider nextArrow={<ArrowNext />} prevArrow={<ArrowPrev />}>
 						{car.images.map(image => (
 							<Slide key={image.url}>
-								<Image src={image.url} alt={image.filename} fill priority objectFit={'cover'} />
+								<Image src={image.url} alt={image.filename} className={'img'} fill priority />
 							</Slide>
 						))}
 					</WSlider>
@@ -166,9 +170,11 @@ export default function SingleCar({ car }: SingleCarProps) {
 					<WCalendar
 						onChange={(...params: any) => console.log('onChange', params)}
 						value={new Date()}
-						tileClassName={({ date }) => getCalendarDateClassnames(date, rentalOrders?.rentalOrders || [], user)}
+						tileClassName={({ date }) =>
+							getCalendarDateClassnames(date, rentalOrders?.rentalOrders || [], user)
+						}
 						activeStartDate={activeStartDate.toDate()}
-						onActiveStartDateChange={(view) => setActiveStartDate(dayjs(view.activeStartDate))}
+						onActiveStartDateChange={view => setActiveStartDate(dayjs(view.activeStartDate))}
 					/>
 				</Grid>
 				<Grid item xs={7}>

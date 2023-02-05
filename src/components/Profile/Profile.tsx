@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -46,7 +46,7 @@ export default function Profile() {
 	const { mutate: switchRole, isLoading: isSwitchRoleLoading } = useMutation(
 		UserService.switchRole,
 		{
-			onSuccess: () => queryClient.invalidateQueries(entities.contextUser),
+			onSuccess: () => queryClient.invalidateQueries([entities.contextUser]),
 			onError: useSnackbarOnError(),
 		},
 	);

@@ -35,6 +35,10 @@ export const CarImageWrapper = styled.div`
 		height: 3rem;
 		width: unset;
 	}
+	
+	.title-image {
+		object-fit: cover;
+	}
 `;
 
 export const CarInfo = styled.div`
