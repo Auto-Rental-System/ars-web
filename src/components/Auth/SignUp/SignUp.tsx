@@ -1,6 +1,6 @@
 import Router from 'next/router';
 import Link from 'next/link';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useState, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';

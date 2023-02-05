@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
+import {GetServerSideProps} from "next";
 import Head from 'next/head';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import {dehydrate, QueryClient, useQuery} from '@tanstack/react-query';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -13,10 +14,23 @@ import { entities } from 'consts/entities';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { AppHeader } from 'components/AppHeader';
 import { ListHeader } from 'components/ListHeader';
-import { ListHolder } from 'components/Cars/CarsToRent/CarsToRent.styles';
 import { CarCard } from 'components/CarCard';
 
 export const path = '/reports/my-cars';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const queryClient = new QueryClient();
+
+	await queryClient.prefetchQuery([entities.myCarsReport, 0, 10, 'ASC', 'car.id'], () =>
+		ReportService.getMyCarsReport(1, 10),
+	);
+
+	return {
+		props: {
+			dehydratedState: dehydrate(queryClient),
+		},
+	};
+};
 
 export default function MyCarsPage() {
 	const router = useRouter();
@@ -67,13 +81,13 @@ export default function MyCarsPage() {
 								setOrder={setOrder}
 								orderDisabled={isLoading}
 							/>
-							<ListHolder>
+							<Grid container direction={'column'} spacing={1}>
 								{orders.list.map(car => (
 									<Grid item key={car.id}>
 										<CarCard car={car} showReport />
 									</Grid>
 								))}
-							</ListHolder>
+							</Grid>
 							<TablePagination
 								component={'div'}
 								count={orders.total}

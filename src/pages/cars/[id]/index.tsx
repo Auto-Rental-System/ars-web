@@ -1,5 +1,6 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -11,6 +12,19 @@ import { CarService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 
 export const path = '/cars/[id]';
+
+export const getServerSideProps: GetServerSideProps = async context => {
+	const queryClient = new QueryClient();
+	const id = parseInt(context.query.id as string);
+
+	await queryClient.prefetchQuery([entities.singleCar, id], () => CarService.getById(id));
+
+	return {
+		props: {
+			dehydratedState: dehydrate(queryClient),
+		},
+	};
+};
 
 export default function CarPage() {
 	const router = useRouter();
