@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 import { useApiToken, ApiToken, useLogout } from 'hooks/auth';
-import { hashCognitoSecret } from 'shared/util';
+import { hashCognitoSecret } from 'shared';
 
 export function useAutoTokenRefresh() {
 	const region: string = process.env.NEXT_PUBLIC_COGNITO_REGION || '';

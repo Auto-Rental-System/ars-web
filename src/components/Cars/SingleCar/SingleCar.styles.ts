@@ -9,7 +9,7 @@ export const Slide = styled.div`
 	position: relative;
 	aspect-ratio: 16 / 9;
 	border-radius: 0.5rem;
-	
+
 	.img {
 		object-fit: cover;
 	}

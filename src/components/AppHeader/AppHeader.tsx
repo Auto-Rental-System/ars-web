@@ -17,7 +17,7 @@ import { entities } from 'consts/entities';
 import { useRole } from 'context/UserContext';
 import { UserService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
-import { useLogout } from 'hooks/auth';
+import { useApiToken, useLogout } from 'hooks/auth';
 import LogoIcon from 'assets/logo.svg';
 import {
 	PagesMenu,
@@ -149,6 +149,7 @@ export default function AppHeader({
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 	const router = useRouter();
 	const role = useRole();
+	const [apiToken] = useApiToken();
 
 	const pages: Array<{ name: string; onClick: () => any; hidden?: boolean; Component?: React.FC }> =
 		[
@@ -165,7 +166,7 @@ export default function AppHeader({
 
 	const { data: me } = useQuery([entities.me], UserService.getCurrent, {
 		onError: useSnackbarOnError(),
-		enabled: !hideUser,
+		enabled: !hideUser && !!apiToken,
 	});
 
 	return (

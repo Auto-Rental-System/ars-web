@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState, ChangeEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Typography from '@mui/material/Typography';
@@ -12,9 +13,10 @@ import {
 	LayoutContainer,
 } from 'components/Auth/SignUp/SignUp.styles';
 import { useApiToken } from 'hooks/auth';
-import { hashCognitoSecret } from 'shared/util';
+import { hashCognitoSecret } from 'shared';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { path as signUpPath } from 'pages/auth/sign-up';
+import { path as homePath } from 'pages/index';
 
 export default function SignIn() {
 	const region: string = process.env.NEXT_PUBLIC_COGNITO_REGION || '';
@@ -22,6 +24,7 @@ export default function SignIn() {
 	const clientSecret: string = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET || '';
 	const provider = new CognitoIdentityProvider({ region });
 
+	const router = useRouter();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [, setApiToken] = useApiToken();
@@ -41,12 +44,13 @@ export default function SignIn() {
 			return provider.initiateAuth(params);
 		},
 		{
-			onSuccess: res => {
+			onSuccess: async res => {
 				setApiToken({
 					AccessToken: res.AuthenticationResult?.AccessToken,
 					RefreshToken: res.AuthenticationResult?.RefreshToken,
 					username: email,
 				});
+				return router.push(homePath);
 			},
 			onError: useSnackbarOnError(),
 		},

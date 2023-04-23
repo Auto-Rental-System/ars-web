@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider as MuiThemeProvider, StyledEngineProvider } from '@mui/material/styles';
@@ -13,9 +14,6 @@ import { SnackbarProvider } from 'hooks/notistack';
 import { OpenAPI as CoreOpenAPi } from 'clients/CoreService';
 import { useAutoTokenRefresh } from 'hooks/auth';
 import { UserContextProvider } from 'context/UserContext';
-import { Routing } from 'components/Routing';
-
-const queryClient = new QueryClient();
 
 CoreOpenAPi.BASE = process.env.NEXT_PUBLIC_CORE_URL as string;
 
@@ -36,10 +34,12 @@ export default function App({ Component, pageProps }: AppProps) {
 										options={{ 'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '' }}
 									>
 										<SnackbarProvider>
-											<UserContextProvider>
-												<GlobalStyle />
-												<Routing Component={Component} pageProps={pageProps} />
-											</UserContextProvider>
+											<CookiesProvider>
+												<UserContextProvider>
+													<GlobalStyle />
+													<Component {...pageProps} />
+												</UserContextProvider>
+											</CookiesProvider>
 										</SnackbarProvider>
 									</PayPalScriptProvider>
 								</LocalizationProvider>

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import {GetServerSideProps} from "next";
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import {dehydrate, QueryClient, useQuery} from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -15,10 +15,18 @@ import { useSnackbarOnError } from 'hooks/notistack';
 import { AppHeader } from 'components/AppHeader';
 import { ListHeader } from 'components/ListHeader';
 import { CarCard } from 'components/CarCard';
+import { applyRoleRouting, setClientConfig } from 'shared';
 
 export const path = '/reports/my-cars';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	setClientConfig(req);
+	const redirecting = await applyRoleRouting(['Landlord']);
+
+	if (redirecting) {
+		return redirecting;
+	}
+
 	const queryClient = new QueryClient();
 
 	await queryClient.prefetchQuery([entities.myCarsReport, 0, 10, 'ASC', 'car.id'], () =>

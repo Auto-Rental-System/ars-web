@@ -19,10 +19,17 @@ import { entities } from 'consts/entities';
 import { useSnackbarOnError } from 'hooks/notistack';
 
 import { path as addCarPath } from 'pages/cars/add';
+import { applyRoleRouting, setClientConfig } from 'shared';
 
 export const path = '/cars';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	setClientConfig(req);
+	const redirecting = await applyRoleRouting(['Landlord', 'Renter']);
+
+	if (redirecting) {
+		return redirecting;
+	}
 	const queryClient = new QueryClient();
 
 	await queryClient.prefetchQuery([entities.carsToRent, 0, 10, 'ASC', 'car.price'], () =>

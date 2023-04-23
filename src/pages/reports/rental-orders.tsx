@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import {GetServerSideProps} from "next";
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import {dehydrate, QueryClient, useQuery} from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
@@ -10,15 +10,23 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 
 import { AppHeader } from 'components/AppHeader';
-import {CarService, Order, OrderListOrderBy, ReportService} from 'clients/CoreService';
+import { Order, OrderListOrderBy, ReportService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { entities } from 'consts/entities';
 import { ListHeader } from 'components/ListHeader';
 import { RentalOrderCard } from 'components/RentalOrderCard';
+import { applyRoleRouting, setClientConfig } from 'shared';
 
 export const path = '/reports/rental-orders';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	setClientConfig(req);
+	const redirecting = await applyRoleRouting(['Renter', 'Landlord']);
+
+	if (redirecting) {
+		return redirecting;
+	}
+
 	const queryClient = new QueryClient();
 
 	await queryClient.prefetchQuery([entities.orders, 0, 10, 'ASC', 'order.id'], () =>

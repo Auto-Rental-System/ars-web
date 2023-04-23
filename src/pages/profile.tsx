@@ -2,8 +2,16 @@ import Head from 'next/head';
 
 import { AppHeader } from 'components/AppHeader';
 import { Profile } from 'components/Profile';
+import { GetServerSideProps } from 'next';
+import { applyRoleRouting, EMPTY_PROPS, setClientConfig } from 'shared';
 
 export const path = '/profile';
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	setClientConfig(req);
+	const redirecting = await applyRoleRouting(['Landlord', 'Renter']);
+	return redirecting || EMPTY_PROPS;
+};
 
 export default function Home() {
 	return (

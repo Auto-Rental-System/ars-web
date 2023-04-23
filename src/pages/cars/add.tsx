@@ -1,10 +1,18 @@
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 
 import { AppHeader } from 'components/AppHeader';
 import { AddCar } from 'components/Cars/AddCar';
+import { applyRoleRouting, EMPTY_PROPS, setClientConfig } from 'shared';
 
 export const path = '/cars/add';
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	setClientConfig(req);
+	const redirecting = await applyRoleRouting(['Landlord']);
+	return redirecting || EMPTY_PROPS;
+};
 
 export default function CarsPage() {
 	return (

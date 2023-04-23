@@ -10,10 +10,18 @@ import { SingleCar } from 'components/Cars/SingleCar';
 import { entities } from 'consts/entities';
 import { CarService } from 'clients/CoreService';
 import { useSnackbarOnError } from 'hooks/notistack';
+import { applyRoleRouting, setClientConfig } from 'shared';
 
 export const path = '/cars/[id]';
 
 export const getServerSideProps: GetServerSideProps = async context => {
+	setClientConfig(context.req);
+	const redirecting = await applyRoleRouting(['Landlord', 'Renter']);
+
+	if (redirecting) {
+		return redirecting;
+	}
+
 	const queryClient = new QueryClient();
 	const id = parseInt(context.query.id as string);
 

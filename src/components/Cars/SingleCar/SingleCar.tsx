@@ -237,7 +237,6 @@ export default function SingleCar({ car }: SingleCarProps) {
 									onApprove={async (data, actions) => {
 										const order = await actions.order?.capture();
 										if (order) {
-											const orderId = order.id;
 											rentCar({ orderId: order.id });
 										}
 									}}

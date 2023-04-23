@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
-import { hashCognitoSecret } from 'shared/util';
+import { hashCognitoSecret } from 'shared';
 import { useSnackbarOnError } from 'hooks/notistack';
 import { UserService } from 'clients/CoreService';
 import { path as verifyAccountPath } from 'pages/auth/verify';

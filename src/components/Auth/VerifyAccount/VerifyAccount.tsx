@@ -12,7 +12,7 @@ import {
 	AuthForm,
 	LayoutContainer,
 } from 'components/Auth/SignUp/SignUp.styles';
-import { hashCognitoSecret } from 'shared/util';
+import { hashCognitoSecret } from 'shared';
 import { useSnackbarOnError } from 'hooks/notistack';
 
 import { path as signInPath } from 'pages/auth/sign-in';
